@@ -8,6 +8,12 @@
 npm i --save-dev kysely-migrate
 ```
 
+## Usage
+
+```bash
+kysely-migrate <command> [options]
+```
+
 ## Docs
 
 Run `kysely-migrate --help` (output below) or `kysely-migrate <command> --help` to see the list of available commands and options.
