@@ -7,7 +7,7 @@ import { glob } from 'glob'
 console.log('Restoring package.json files.')
 
 // Get all package.json files
-const packagePaths = await glob('packages/**/package.json.tmp', {
+const packagePaths = await glob('**/package.json.tmp', {
   ignore: ['**/dist/**', '**/node_modules/**'],
 })
 

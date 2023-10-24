@@ -6,7 +6,6 @@ test('exports', () => {
   expect(Object.keys(Exports)).toMatchInlineSnapshot(`
     [
       "defineConfig",
-      "logger",
       "loadEnv",
       "version",
     ]

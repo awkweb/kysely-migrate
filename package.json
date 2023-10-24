@@ -22,8 +22,9 @@
     "lint:unused": "pnpm clean && knip --ignore-internal",
     "preinstall": "npx only-allow pnpm",
     "prepare": "pnpm simple-git-hooks",
+    "prepublishOnly": "bun .scripts/formatPackageJson.ts",
     "test": "vitest",
-    "test:cov": "vitest --coverage",
+    "test:cov": "vitest run --coverage",
     "test:build": "publint --strict",
     "typecheck": "tsc --noEmit",
     "version:update": "bun .scripts/updateVersion.ts"
@@ -90,12 +91,15 @@
     "typescript": "5.2.2",
     "vitest": "^0.34.5"
   },
-  "contributors": ["tmm@awkweb.com>"],
+  "contributors": ["tmm@awkweb.com"],
   "funding": "https://github.com/sponsors/tmm",
   "keywords": ["kysely", "cli", "migrate", "migrations"],
   "packageManager": "pnpm@8.8.0",
   "simple-git-hooks": {
     "pre-commit": "pnpm format && pnpm lint:fix"
   },
-  "knip": {}
+  "knip": {
+    "entry": ["src/**/*.ts!", "src/exports/index.ts!"],
+    "project": [".scripts/**/*.ts"]
+  }
 }

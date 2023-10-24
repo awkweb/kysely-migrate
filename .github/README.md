@@ -10,7 +10,7 @@ npm i --save-dev kysely-migrate
 
 ## Docs
 
-Run `kysely-migrate --help` or `kysely-migrate <command> --help` to see the list of available commands and options.
+Run `kysely-migrate --help` (output below) or `kysely-migrate <command> --help` to see the list of available commands and options.
 
 ```bash
 Usage:
@@ -31,3 +31,7 @@ Options:
   -h, --help     Display this message 
   -v, --version  Display version number 
 ```
+
+## Sponsors
+
+If you find kysely-migrate useful or use it for work, please consider supporting development on [GitHub Sponsors](https://github.com/sponsors/tmm). Thank you 🙏
