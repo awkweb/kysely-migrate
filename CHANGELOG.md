@@ -1,5 +1,11 @@
 # kysely-migrate
 
+## 0.0.3
+
+### Patch Changes
+
+- [`014f0d4`](https://github.com/tmm/kysely-migrate/commit/014f0d4d09ec60e39f4ad07297a842a76a78039b) Thanks [@tmm](https://github.com/tmm)! - Bumped deps
+
 ## 0.0.2
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "name": "kysely-migrate",
   "description": "Kysely migrations CLI",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -91,15 +91,27 @@
     "typescript": "5.2.2",
     "vitest": "^0.34.5"
   },
-  "contributors": ["tmm@awkweb.com"],
+  "contributors": [
+    "tmm@awkweb.com"
+  ],
   "funding": "https://github.com/sponsors/tmm",
-  "keywords": ["kysely", "cli", "migrate", "migrations"],
+  "keywords": [
+    "kysely",
+    "cli",
+    "migrate",
+    "migrations"
+  ],
   "packageManager": "pnpm@8.8.0",
   "simple-git-hooks": {
     "pre-commit": "pnpm format && pnpm lint:fix"
   },
   "knip": {
-    "entry": ["src/**/*.ts!", "src/exports/index.ts!"],
-    "project": [".scripts/**/*.ts"]
+    "entry": [
+      "src/**/*.ts!",
+      "src/exports/index.ts!"
+    ],
+    "project": [
+      ".scripts/**/*.ts"
+    ]
   }
 }
