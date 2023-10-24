@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.build.json",
+  "include": [".scripts/**/*.ts", "src/**/*.ts", "test/**/*.ts"],
+  "exclude": [],
+  "compilerOptions": {
+    "types": ["bun-types"]
+  }
+}

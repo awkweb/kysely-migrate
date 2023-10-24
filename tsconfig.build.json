@@ -1,0 +1,32 @@
+{
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"],
+  "compilerOptions": {
+    "incremental": true,
+
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "useDefineForClassFields": true,
+    "useUnknownInCatchVariables": true,
+
+    "allowJs": false,
+    "checkJs": false,
+
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": true,
+
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "target": "ES2021",
+    "lib": ["ES2022", "DOM"],
+    "sourceMap": true,
+
+    "skipLibCheck": true
+  }
+}
