@@ -1,12 +1,12 @@
 import { existsSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { setTimeout as sleep } from 'node:timers/promises'
-import { cancel, intro, isCancel, outro, select, spinner } from '@clack/prompts'
+import { cancel, isCancel, select, spinner } from '@clack/prompts'
 import pc from 'picocolors'
 
 import { findConfig } from '../utils/findConfig.js'
+import { getAppliedMigrationsCount } from '../utils/getAppliedMigrationsCount.js'
 import { loadConfig } from '../utils/loadConfig.js'
-import { logAppliedMigrationsCount } from '../utils/logAppliedMigrationsCount.js'
 import { logResultSet } from '../utils/logResultSet.js'
 
 export type ToOptions = {
@@ -16,8 +16,6 @@ export type ToOptions = {
 }
 
 export async function to(options: ToOptions) {
-  intro(pc.inverse(' kysely-migrate '))
-
   // Get cli config file
   const configPath = await findConfig(options)
   if (!configPath) {
@@ -33,15 +31,9 @@ export async function to(options: ToOptions) {
 
   const migrations = await config.migrator.getMigrations()
 
-  if (migrations.length === 0) {
-    outro('No migrations.')
-    return process.exit(0)
-  }
+  if (migrations.length === 0) return 'No migrations.'
 
-  if (migrations.length === 1) {
-    outro('No enough migrations.')
-    return process.exit(0)
-  }
+  if (migrations.length === 1) return 'No enough migrations.'
 
   let migration: string | symbol
   if (options.name) migration = options.name
@@ -90,7 +82,5 @@ export async function to(options: ToOptions) {
   s.stop('Ran migrations', error ? 1 : 0)
 
   logResultSet(resultSet)
-  logAppliedMigrationsCount(results)
-
-  return process.exit(0)
+  return getAppliedMigrationsCount(results)
 }

@@ -1,13 +1,13 @@
 import { existsSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { setTimeout as sleep } from 'node:timers/promises'
-import { intro, outro, spinner } from '@clack/prompts'
+import { spinner } from '@clack/prompts'
 import type { MigrationResultSet } from 'kysely'
 import pc from 'picocolors'
 
 import { findConfig } from '../utils/findConfig.js'
+import { getAppliedMigrationsCount } from '../utils/getAppliedMigrationsCount.js'
 import { loadConfig } from '../utils/loadConfig.js'
-import { logAppliedMigrationsCount } from '../utils/logAppliedMigrationsCount.js'
 import { logResultSet } from '../utils/logResultSet.js'
 
 export type UpOptions = {
@@ -17,8 +17,6 @@ export type UpOptions = {
 }
 
 export async function up(options: UpOptions) {
-  intro(pc.inverse(' kysely-migrate '))
-
   // Get cli config file
   const configPath = await findConfig(options)
   if (!configPath) {
@@ -35,10 +33,7 @@ export async function up(options: UpOptions) {
   const migrations = await config.migrator.getMigrations()
   const pendingMigrations = migrations.filter((m) => !m.executedAt)
 
-  if (pendingMigrations.length === 0) {
-    outro('No pending migrations.')
-    return process.exit(0)
-  }
+  if (pendingMigrations.length === 0) return 'No pending migrations.'
 
   const s = spinner()
   s.start('Running migrations')
@@ -52,7 +47,5 @@ export async function up(options: UpOptions) {
   s.stop('Ran migrations', error ? 1 : 0)
 
   logResultSet(resultSet)
-  logAppliedMigrationsCount(results)
-
-  return process.exit(0)
+  return getAppliedMigrationsCount(results)
 }

@@ -1,20 +1,13 @@
 import { existsSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { setTimeout as sleep } from 'node:timers/promises'
-import {
-  cancel,
-  confirm,
-  intro,
-  isCancel,
-  outro,
-  spinner,
-} from '@clack/prompts'
+import { cancel, confirm, isCancel, spinner } from '@clack/prompts'
 import { type MigrationResultSet } from 'kysely'
 import pc from 'picocolors'
 
 import { findConfig } from '../utils/findConfig.js'
+import { getAppliedMigrationsCount } from '../utils/getAppliedMigrationsCount.js'
 import { loadConfig } from '../utils/loadConfig.js'
-import { logAppliedMigrationsCount } from '../utils/logAppliedMigrationsCount.js'
 import { logResultSet } from '../utils/logResultSet.js'
 
 export type DownOptions = {
@@ -24,8 +17,6 @@ export type DownOptions = {
 }
 
 export async function down(options: DownOptions) {
-  intro(pc.inverse(' kysely-migrate '))
-
   // Get cli config file
   const configPath = await findConfig(options)
   if (!configPath) {
@@ -42,10 +33,7 @@ export async function down(options: DownOptions) {
   const migrations = await config.migrator.getMigrations()
   const executedMigrations = migrations.filter((m) => m.executedAt)
 
-  if (executedMigrations.length === 0) {
-    outro('No migrations executed.')
-    return process.exit(0)
-  }
+  if (executedMigrations.length === 0) return 'No migrations executed.'
 
   if (options.reset) {
     const shouldContinue = await confirm({
@@ -55,10 +43,7 @@ export async function down(options: DownOptions) {
       cancel('Operation cancelled')
       return process.exit(0)
     }
-    if (!shouldContinue) {
-      outro('Applied 0 migrations.')
-      return process.exit(0)
-    }
+    if (!shouldContinue) return 'Applied 0 migrations.'
   }
 
   const s = spinner()
@@ -80,7 +65,5 @@ export async function down(options: DownOptions) {
   s.stop('Ran migrations', error ? 1 : 0)
 
   logResultSet(resultSet)
-  logAppliedMigrationsCount(results)
-
-  return process.exit(0)
+  return getAppliedMigrationsCount(results)
 }

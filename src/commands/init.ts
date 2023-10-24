@@ -1,5 +1,5 @@
 import { basename, relative, resolve } from 'node:path'
-import { cancel, confirm, intro, isCancel, outro } from '@clack/prompts'
+import { cancel, confirm, isCancel } from '@clack/prompts'
 import { writeFile } from 'fs/promises'
 import pc from 'picocolors'
 
@@ -12,8 +12,6 @@ export type InitOptions = {
 }
 
 export async function init(options: InitOptions) {
-  intro(pc.inverse(' kysely-migrate '))
-
   const rootDir = resolve(options.root || process.cwd())
   const outPath = resolve(rootDir, 'kysely-migrate.config.ts')
 
@@ -40,10 +38,10 @@ export default defineConfig(${JSON.stringify(defaultConfig)})
 
   if (shouldContinue) {
     await writeFile(outPath, content)
-    outro(
-      `Created config file at ${pc.green(relative(process.cwd(), outPath))}`,
-    )
-  } else outro('Config file not created.')
+    return `Created config file at ${pc.green(
+      relative(process.cwd(), outPath),
+    )}`
+  }
 
-  return process.exit(0)
+  return 'Config file not created.'
 }

@@ -1,5 +1,7 @@
 #!/usr/bin/env node
+import { intro, outro } from '@clack/prompts'
 import { cac } from 'cac'
+import pc from 'picocolors'
 
 import { type CreateOptions, create } from './commands/create.js'
 import { type DownOptions, down } from './commands/down.js'
@@ -65,13 +67,17 @@ try {
   // If not matched command, either show help or error out
   if (!cli.matchedCommand) {
     if (cli.args.length === 0) {
-      if (!cli.options.help) cli.outputHelp()
-    } else throw new Error(`Unknown command: ${cli.args.join(' ')}`)
-  }
+      if (!cli.options.help && !cli.options.version) cli.outputHelp()
+    } else {
+      intro(pc.inverse(' kysely-migrate '))
+      throw new Error(`Unknown command: ${cli.args.join(' ')}`)
+    }
+  } else intro(pc.inverse(' kysely-migrate '))
 
-  await cli.runMatchedCommand()
+  const result = await cli.runMatchedCommand()
+  if (result) outro(result)
   process.exit(0)
 } catch (error) {
-  console.error(`\n${(error as Error).message}`)
+  outro(pc.red(`Error: ${(error as Error).message}`))
   process.exit(1)
 }

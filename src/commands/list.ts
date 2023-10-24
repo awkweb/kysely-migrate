@@ -1,4 +1,3 @@
-import { intro, outro } from '@clack/prompts'
 import pc from 'picocolors'
 
 import { S_BAR, S_INFO, S_SUCCESS, message } from '../utils/clack.js'
@@ -11,8 +10,6 @@ export type ListOptions = {
 }
 
 export async function list(options: ListOptions) {
-  intro(pc.inverse(' kysely-migrate '))
-
   // Get cli config file
   const configPath = await findConfig(options)
   if (!configPath) {
@@ -37,11 +34,7 @@ export async function list(options: ListOptions) {
     else message(migration.name, { symbol: pc.blue(S_INFO) })
   }
 
-  outro(
-    `Found ${migrationsCount} ${
-      migrationsCount === 1 ? 'migration' : 'migrations'
-    }.`,
-  )
-
-  return process.exit(0)
+  return `Found ${migrationsCount} ${
+    migrationsCount === 1 ? 'migration' : 'migrations'
+  }.`
 }

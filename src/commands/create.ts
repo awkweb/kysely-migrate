@@ -2,7 +2,6 @@ import { existsSync } from 'node:fs'
 import { writeFile } from 'node:fs/promises'
 import { mkdir } from 'node:fs/promises'
 import { relative } from 'node:path'
-import { intro, outro } from '@clack/prompts'
 import { snakeCase } from 'change-case'
 import { humanId } from 'human-id'
 import pc from 'picocolors'
@@ -17,8 +16,6 @@ export type CreateOptions = {
 }
 
 export async function create(options: CreateOptions) {
-  intro(pc.inverse(' kysely-migrate '))
-
   // Get cli config file
   const configPath = await findConfig(options)
   if (!configPath) {
@@ -52,5 +49,5 @@ export async function down(db: Kysely<any>): Promise<void> {}
   await writeFile(migrationFilePath, content)
 
   const migrationRelativeFilePath = relative(process.cwd(), migrationFilePath)
-  outro(`Created ${pc.green(migrationRelativeFilePath)}`)
+  return `Created ${pc.green(migrationRelativeFilePath)}`
 }
