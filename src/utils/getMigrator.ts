@@ -5,7 +5,7 @@ import { FileMigrationProvider, Migrator } from 'kysely'
 import { type Config } from '../config.js'
 
 export function getMigrator(config: Config) {
-  if ('migrator' in config) return config.migrator
+  if ('migrator' in config && config.migrator) return config.migrator
 
   const { db, fs = nodeFs, path = nodePath } = config
   const migrationFolder = nodePath.resolve(config.migrationFolder)

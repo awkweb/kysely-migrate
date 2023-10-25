@@ -33,6 +33,7 @@ cli
   .option('-R, --reset', '[boolean] reset all migrations')
   .option('-r, --root <path>', '[string] root path to resolve config from')
   .example((name) => `${name} down`)
+  .example((name) => `${name} down --reset`)
   .action(async (options: DownOptions) => await down(options))
 
 cli
@@ -55,6 +56,7 @@ cli
   .option('-n, --name <name>', '[string] migration name')
   .option('-r, --root <path>', '[string] root path to resolve config from')
   .example((name) => `${name} to`)
+  .example((name) => `${name} to --name 0001_every_mangos_carry`)
   .action(async (options: ToOptions) => await to(options))
 
 cli
@@ -63,6 +65,7 @@ cli
   .option('-l, --latest', '[boolean] apply all pending migrations')
   .option('-r, --root <path>', '[string] root path to resolve config from')
   .example((name) => `${name} up`)
+  .example((name) => `${name} up --latest`)
   .action(async (options: UpOptions) => await up(options))
 
 cli.help()

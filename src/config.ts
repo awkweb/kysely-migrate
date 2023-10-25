@@ -8,20 +8,14 @@ import {
 import { type CliOptions } from 'kysely-codegen'
 import { type Definitions } from './utils/codegen/types.js'
 
-export type Config =
-  | {
-      codegen?: Evaluate<Codegen> | undefined
-      db: Kysely<any>
-      fs?: FileMigrationProviderFS | undefined
-      path?: FileMigrationProviderPath | undefined
-      migrationFolder: string
-    }
-  | {
-      codegen?: Evaluate<Codegen> | undefined
-      db?: Kysely<any> | undefined
-      migrationFolder: string
-      migrator: Migrator
-    }
+export type Config = {
+  codegen?: Evaluate<Codegen> | undefined
+  db: Kysely<any>
+  fs?: FileMigrationProviderFS | undefined
+  path?: FileMigrationProviderPath | undefined
+  migrationFolder: string
+  migrator?: Migrator | undefined
+}
 
 type Codegen =
   | {

@@ -6,8 +6,8 @@ import { expand } from 'dotenv-expand'
 // https://github.com/vitejs/vite/blob/main/packages/vite/src/node/env.ts#L7
 export function loadEnv(
   config: {
-    mode?: string
-    envDir?: string
+    mode?: string | undefined
+    envDir?: string | undefined
   } = {},
 ): Record<string, string> {
   const mode = config.mode
