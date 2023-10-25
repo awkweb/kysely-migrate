@@ -1,15 +1,18 @@
+import { setTimeout as sleep } from 'node:timers/promises'
+import { dirname, relative } from 'path'
+import { capitalCase } from 'change-case'
+import { writeFile } from 'fs/promises'
 import { Cli } from 'kysely-codegen'
 import pc from 'picocolors'
 
-import { relative } from 'path'
-import { readFile, writeFile } from 'fs/promises'
+import { spinner } from '@clack/prompts'
+import { S_BAR, S_SUCCESS, message } from '../utils/clack.js'
 import { getTypes } from '../utils/codegen/getTypes.js'
 import { findConfig } from '../utils/findConfig.js'
 import { loadConfig } from '../utils/loadConfig.js'
 
 export type CodegenOptions = {
   config?: string | undefined
-  debug?: boolean | undefined
   root?: string | undefined
 }
 
@@ -22,10 +25,14 @@ export async function codegen(options: CodegenOptions) {
   const db = config.db
   if (!db) throw new Error('`db` config required to generate types.')
 
-  const tables = await db.introspection.getTables()
-
   if (!config.codegen)
     throw new Error('`codegen` config required to generate types.')
+
+  const s = spinner()
+  s.start('Generating types')
+  await sleep(250) // so spinner has a chance :)
+
+  const tables = await db.introspection.getTables()
 
   const content = getTypes(
     tables,
@@ -33,33 +40,44 @@ export async function codegen(options: CodegenOptions) {
     config.codegen.definitions,
   )
   await writeFile(config.codegen.out, content)
+  s.stop('Generated types')
 
-  if (options.debug) {
-    const cli = new Cli()
-    const outFile = `${config.codegen.out}`.replace('.ts', '2.ts')
-    await cli.generate({
+  process.stdout.write(`${pc.gray(S_BAR)}\n`)
+
+  for (const table of tables) {
+    const count = table.columns.length
+    const properties = pc.gray(
+      pc.italic(`${count} ${count === 1 ? 'property' : 'properties'}`),
+    )
+    message(
+      `${table.name} => ${pc.magenta('export')} ${pc.cyan('type')} ${pc.green(
+        capitalCase(table.name),
+      )} = ${pc.yellow('{')} ${properties} ${pc.yellow('}')}`,
+      { symbol: pc.green(S_SUCCESS) },
+    )
+  }
+
+  const kyselyCodegenOptions = config.codegen['kysely-codegen']
+  if (kyselyCodegenOptions) {
+    const defaultOptions = {
       camelCase: false,
-      dialectName: undefined,
+      dialectName: config.codegen.dialect,
       envFile: undefined,
       excludePattern: undefined,
       includePattern: undefined,
       logLevel: 0,
-      outFile,
+      outFile: `${dirname(config.codegen.out)}/types-kc.ts`,
       print: false,
       schema: undefined,
       typeOnlyImports: true,
-      url: `mysql://${process.env.database_username}:${
-        process.env.database_password
-      }@${process.env.database_host}/${process.env.database_name}${
-        process.env.enable_psdb === 'true'
-          ? '?ssl={"rejectUnauthorized":true}'
-          : ''
-      }`,
       verify: false,
-    })
-    const content2 = await readFile(outFile, 'utf-8')
-    console.log(content)
-    console.log(content2)
+    }
+    const cliOptions =
+      typeof kyselyCodegenOptions === 'object'
+        ? { ...defaultOptions, ...kyselyCodegenOptions }
+        : { ...defaultOptions, url: kyselyCodegenOptions }
+    const cli = new Cli()
+    await cli.generate(cliOptions)
   }
 
   const codegenRelativeFilePath = relative(process.cwd(), config.codegen.out)

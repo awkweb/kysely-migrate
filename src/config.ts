@@ -5,6 +5,7 @@ import {
   Migrator,
 } from 'kysely'
 
+import { type CliOptions } from 'kysely-codegen'
 import { type Definitions } from './utils/codegen/types.js'
 
 export type Config =
@@ -26,13 +27,21 @@ type Codegen =
   | {
       definitions?: Evaluate<Definitions> | undefined
       dialect: 'mysql' | 'postgres' | 'sqlite'
+      'kysely-codegen'?: string | KyselyCodegenOptions | undefined
       out: string
     }
   | {
       definitions: Evaluate<Definitions> | undefined
       dialect?: 'mysql' | 'postgres' | 'sqlite'
+      'kysely-codegen'?: string | KyselyCodegenOptions | undefined
       out: string
     }
+
+type KyselyCodegenOptions = Evaluate<
+  Partial<
+    Pick<CliOptions, 'camelCase' | 'dialectName' | 'outFile' | 'schema'>
+  > & { url: string }
+>
 
 export function defineConfig(
   config:

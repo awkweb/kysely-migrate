@@ -23,6 +23,10 @@ import { postgresDefinitions } from './definitions/postgres.js'
 import { sqliteDefinitions } from './definitions/sqlite.js'
 import { type DefinitionNode, type Definitions, type Dialect } from './types.js'
 
+// Useful links:
+// - https://ts-ast-viewer.com
+// - https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API
+
 const dialectDefinitions = {
   mysql: mysqlDefinitions,
   postgres: postgresDefinitions,
@@ -84,7 +88,7 @@ export function getTypes(
           type,
           factory.createLiteralTypeNode(factory.createNull()),
         ])
-      else if (column.hasDefaultValue) {
+      else if (column.hasDefaultValue || column.isAutoIncrementing) {
         if (importsMap.has('kysely')) {
           const kyselyImports = importsMap.get('kysely')!
           kyselyImports.add(kyselyColumnTypeImportSpecifier)

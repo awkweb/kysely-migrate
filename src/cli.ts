@@ -17,10 +17,6 @@ const cli = cac('kysely-migrate')
 cli
   .command('codegen', 'generate types from database metadata')
   .option('-c, --config <path>', '[string] path to config file')
-  .option(
-    '-d, --debug',
-    '[boolean] debug generated types against kysely-codegen package',
-  )
   .option('-r, --root <path>', '[string] root path to resolve config from')
   .example((name) => `${name} codegen`)
   .action(async (options: CodegenOptions) => await codegen(options))

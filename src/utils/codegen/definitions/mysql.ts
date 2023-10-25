@@ -6,11 +6,29 @@ import {
   jsonPrimitiveTypeAlias,
   jsonTypeAlias,
   jsonValueTypeAlias,
+  kyselyColumnTypeIdentifier,
   kyselyColumnTypeImportSpecifier,
 } from '../declarations.js'
 import { type Definitions } from '../types.js'
 
-// TODO: Complete definitions
+const decimalIdentifier = factory.createIdentifier('Decimal')
+const decimalTypeAlias = factory.createTypeAliasDeclaration(
+  [factory.createToken(SyntaxKind.ExportKeyword)],
+  decimalIdentifier,
+  undefined,
+  factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+    factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+    factory.createUnionTypeNode([
+      factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+    ]),
+    factory.createUnionTypeNode([
+      factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+    ]),
+  ]),
+)
+
 export const mysqlDefinitions = {
   bigint: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   binary: factory.createTypeReferenceNode(
@@ -34,11 +52,13 @@ export const mysqlDefinitions = {
     factory.createIdentifier('Date'),
     undefined,
   ),
-  // decimal: new IdentifierNode('Decimal'),
+  decimal: {
+    imports: { kysely: [kyselyColumnTypeImportSpecifier] },
+    declarations: [decimalTypeAlias],
+    value: factory.createTypeReferenceNode(decimalIdentifier, undefined),
+  },
   double: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   float: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  // geomcollection: new ArrayExpressionNode(new IdentifierNode('Geometry')), // Specified as "geometrycollection" in Adminer.
-  // geometry: new IdentifierNode('Geometry'),
   int: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   json: {
     imports: { kysely: [kyselyColumnTypeImportSpecifier] },
@@ -51,7 +71,6 @@ export const mysqlDefinitions = {
     ],
     value: factory.createTypeReferenceNode(jsonIdentifier, undefined),
   },
-  // linestring: new IdentifierNode('LineString'),
   longblob: factory.createTypeReferenceNode(
     factory.createIdentifier('Buffer'),
     undefined,
@@ -63,11 +82,6 @@ export const mysqlDefinitions = {
   ),
   mediumint: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   mediumtext: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  // multilinestring: new ArrayExpressionNode(new IdentifierNode('LineString')),
-  // multipoint: new ArrayExpressionNode(new IdentifierNode('Point')),
-  // multipolygon: new ArrayExpressionNode(new IdentifierNode('Polygon')),
-  // point: new IdentifierNode('Point'),
-  // polygon: new IdentifierNode('Polygon'),
   set: factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
   smallint: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   text: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),

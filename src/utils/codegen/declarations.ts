@@ -7,6 +7,11 @@ export const kyselyColumnTypeImportSpecifier = factory.createImportSpecifier(
   kyselyColumnTypeIdentifier,
 )
 
+const columnIdentifier = factory.createIdentifier('c')
+const selectIdentifier = factory.createIdentifier('s')
+const insertIdentifier = factory.createIdentifier('i')
+const updateIdentifier = factory.createIdentifier('i')
+
 export const generatedIdentifier = factory.createIdentifier('Generated')
 export const generatedTypeAlias = factory.createTypeAliasDeclaration(
   [factory.createToken(SyntaxKind.ExportKeyword)],
@@ -14,21 +19,18 @@ export const generatedTypeAlias = factory.createTypeAliasDeclaration(
   [
     factory.createTypeParameterDeclaration(
       undefined,
-      factory.createIdentifier('columnType'),
+      columnIdentifier,
       undefined,
       undefined,
     ),
   ],
   factory.createConditionalTypeNode(
-    factory.createTypeReferenceNode(
-      factory.createIdentifier('columnType'),
-      undefined,
-    ),
+    factory.createTypeReferenceNode(columnIdentifier, undefined),
     factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
       factory.createInferTypeNode(
         factory.createTypeParameterDeclaration(
           undefined,
-          factory.createIdentifier('selectType'),
+          selectIdentifier,
           undefined,
           undefined,
         ),
@@ -36,7 +38,7 @@ export const generatedTypeAlias = factory.createTypeAliasDeclaration(
       factory.createInferTypeNode(
         factory.createTypeParameterDeclaration(
           undefined,
-          factory.createIdentifier('insertType'),
+          insertIdentifier,
           undefined,
           undefined,
         ),
@@ -44,45 +46,27 @@ export const generatedTypeAlias = factory.createTypeAliasDeclaration(
       factory.createInferTypeNode(
         factory.createTypeParameterDeclaration(
           undefined,
-          factory.createIdentifier('updateType'),
+          updateIdentifier,
           undefined,
           undefined,
         ),
       ),
     ]),
     factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createTypeReferenceNode(
-        factory.createIdentifier('selectType'),
-        undefined,
-      ),
+      factory.createTypeReferenceNode(selectIdentifier, undefined),
       factory.createUnionTypeNode([
-        factory.createTypeReferenceNode(
-          factory.createIdentifier('insertType'),
-          undefined,
-        ),
+        factory.createTypeReferenceNode(insertIdentifier, undefined),
         factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
       ]),
-      factory.createTypeReferenceNode(
-        factory.createIdentifier('updateType'),
-        undefined,
-      ),
+      factory.createTypeReferenceNode(updateIdentifier, undefined),
     ]),
     factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createTypeReferenceNode(
-        factory.createIdentifier('columnType'),
-        undefined,
-      ),
+      factory.createTypeReferenceNode(columnIdentifier, undefined),
       factory.createUnionTypeNode([
-        factory.createTypeReferenceNode(
-          factory.createIdentifier('columnType'),
-          undefined,
-        ),
+        factory.createTypeReferenceNode(columnIdentifier, undefined),
         factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
       ]),
-      factory.createTypeReferenceNode(
-        factory.createIdentifier('columnType'),
-        undefined,
-      ),
+      factory.createTypeReferenceNode(columnIdentifier, undefined),
     ]),
   ),
 )
