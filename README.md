@@ -54,6 +54,10 @@ Run `kysely-migrate --help` or `kysely-migrate <command> --help` to see the list
 
 Creates [`Config`](#config) object.
 
+```ts
+import { defineConfig } from 'kysely-migrate'
+```
+
 | Name    | Type                                       | Description                                                           |
 | ------- | ------------------------------------------ | --------------------------------------------------------------------- |
 | `config` | `Config \| (() => Config \| Promise<Config>)` | Configuration object or a function that returns a configuration object. |
@@ -62,6 +66,10 @@ Creates [`Config`](#config) object.
 ### loadEnv
 
 Loads environment variables from `.env` or `.env.*` files.
+
+```ts
+import { loadEnv } from 'kysely-migrate'
+```
 
 | Name           | Type                      | Description                                 |
 | -------------- | ------------------------- | ------------------------------------------- |
@@ -72,6 +80,10 @@ Loads environment variables from `.env` or `.env.*` files.
 ### Config
 
 `Config` object.
+
+```ts
+import { type Config } from 'kysely-migrate'
+```
 
 ```ts
 {
@@ -112,6 +124,10 @@ import {
   sqliteDefinitions,
 } from 'kysely-migrate'
 ```
+
+## Contributing
+
+Contributions to kysely-migrate are greatly appreciated! If you're interested in contributing, please create a [new GitHub Discussion](https://github.com/tmm/kysely-migrate/discussions/new?category=ideas) with some info on what you would like to work on **before submitting a pull request**.
 
 ## Sponsors
 
