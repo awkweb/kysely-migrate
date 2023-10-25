@@ -68,7 +68,12 @@ test('init', () => {
   const { stdout } = run(['init'], { cwd: genPath })
   const generatedFiles = fs.readdirSync(genPath).sort()
 
-  expect(stdout).toContain('Created config file at kysely-migrate.config.ts')
+  expect(
+    stdout.replace(
+      pc.green('kysely-migrate.config.ts'),
+      'kysely-migrate.config.ts',
+    ),
+  ).toContain('Created config file at kysely-migrate.config.ts')
   expect(generatedFiles).toMatchInlineSnapshot(`
     [
       "kysely-migrate.config.ts",
