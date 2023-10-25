@@ -1,5 +1,11 @@
 # kysely-migrate
 
+## 0.0.4
+
+### Patch Changes
+
+- [`a995110`](https://github.com/tmm/kysely-migrate/commit/a995110a77fa5a500e7d760f34d154671265c821) Thanks [@tmm](https://github.com/tmm)! - Added codegen
+
 ## 0.0.3
 
 ### Patch Changes
