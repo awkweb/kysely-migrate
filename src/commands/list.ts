@@ -2,6 +2,7 @@ import pc from 'picocolors'
 
 import { S_BAR, S_INFO, S_SUCCESS, message } from '../utils/clack.js'
 import { findConfig } from '../utils/findConfig.js'
+import { getMigrator } from '../utils/getMigrator.js'
 import { loadConfig } from '../utils/loadConfig.js'
 
 export type ListOptions = {
@@ -11,16 +12,12 @@ export type ListOptions = {
 
 export async function list(options: ListOptions) {
   // Get cli config file
-  const configPath = await findConfig(options)
-  if (!configPath) {
-    if (options.config)
-      throw new Error(`Config not found at ${pc.gray(options.config)}`)
-    throw new Error('Config not found')
-  }
+  const configPath = await findConfig(options, true)
 
   const config = await loadConfig({ configPath })
+  const migrator = getMigrator(config)
 
-  const migrations = await config.migrator.getMigrations()
+  const migrations = await migrator.getMigrations()
   const migrationsCount = migrations.length
 
   process.stdout.write(`${pc.gray(S_BAR)}\n`)

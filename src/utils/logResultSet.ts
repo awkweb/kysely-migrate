@@ -1,4 +1,4 @@
-import type { MigrationResultSet } from 'kysely'
+import { type MigrationResultSet } from 'kysely'
 import pc from 'picocolors'
 
 import { S_BAR, S_ERROR, S_INFO, S_SUCCESS, message } from './clack.js'

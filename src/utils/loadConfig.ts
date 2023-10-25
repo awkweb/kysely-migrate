@@ -1,6 +1,6 @@
 import { bundleRequire } from 'bundle-require'
 
-import type { Config } from '../config.js'
+import { type Config } from '../config.js'
 
 type LoadConfigParameters = {
   configPath: string

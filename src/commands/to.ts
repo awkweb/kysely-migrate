@@ -6,6 +6,7 @@ import pc from 'picocolors'
 
 import { findConfig } from '../utils/findConfig.js'
 import { getAppliedMigrationsCount } from '../utils/getAppliedMigrationsCount.js'
+import { getMigrator } from '../utils/getMigrator.js'
 import { loadConfig } from '../utils/loadConfig.js'
 import { logResultSet } from '../utils/logResultSet.js'
 
@@ -17,22 +18,17 @@ export type ToOptions = {
 
 export async function to(options: ToOptions) {
   // Get cli config file
-  const configPath = await findConfig(options)
-  if (!configPath) {
-    if (options.config)
-      throw new Error(`Config not found at ${pc.gray(options.config)}`)
-    throw new Error('Config not found')
-  }
+  const configPath = await findConfig(options, true)
 
   const config = await loadConfig({ configPath })
+  const migrator = getMigrator(config)
 
-  const migrationsDir = config.out
+  const migrationsDir = config.migrationFolder
   if (!existsSync(migrationsDir)) await mkdir(migrationsDir)
 
-  const migrations = await config.migrator.getMigrations()
+  const migrations = await migrator.getMigrations()
 
   if (migrations.length === 0) return 'No migrations.'
-
   if (migrations.length === 1) return 'No enough migrations.'
 
   let migration: string | symbol
@@ -76,7 +72,7 @@ export async function to(options: ToOptions) {
   s.start('Running migrations')
   await sleep(500) // so spinner has a chance :)
 
-  const resultSet = await config.migrator.migrateTo(migration as string)
+  const resultSet = await migrator.migrateTo(migration as string)
 
   const { error, results = [] } = resultSet
   s.stop('Ran migrations', error ? 1 : 0)

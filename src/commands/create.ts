@@ -7,6 +7,7 @@ import { humanId } from 'human-id'
 import pc from 'picocolors'
 
 import { findConfig } from '../utils/findConfig.js'
+import { getMigrator } from '../utils/getMigrator.js'
 import { loadConfig } from '../utils/loadConfig.js'
 
 export type CreateOptions = {
@@ -17,19 +18,15 @@ export type CreateOptions = {
 
 export async function create(options: CreateOptions) {
   // Get cli config file
-  const configPath = await findConfig(options)
-  if (!configPath) {
-    if (options.config)
-      throw new Error(`Config not found at ${pc.gray(options.config)}`)
-    throw new Error('Config not found')
-  }
+  const configPath = await findConfig(options, true)
 
   const config = await loadConfig({ configPath })
+  const migrator = getMigrator(config)
 
-  const migrationsDir = config.out
+  const migrationsDir = config.migrationFolder
   if (!existsSync(migrationsDir)) await mkdir(migrationsDir)
 
-  const migrations = await config.migrator.getMigrations()
+  const migrations = await migrator.getMigrations()
   const migrationsCount = migrations.length
 
   const migrationNumber = (migrationsCount + 1).toString().padStart(4, '0')

@@ -7,6 +7,9 @@ test('exports', () => {
     [
       "defineConfig",
       "loadEnv",
+      "mysqlDefinitions",
+      "postgresDefinitions",
+      "sqliteDefinitions",
       "version",
     ]
   `)

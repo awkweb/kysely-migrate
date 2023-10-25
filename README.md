@@ -1,6 +1,6 @@
 # kysely-migrate
 
-[Kysely](https://github.com/kysely-org/kysely) migrations CLI
+[Kysely](https://github.com/kysely-org/kysely) migrations and codegen CLI
 
 ## Installation
 
@@ -23,12 +23,13 @@ Usage:
   $ kysely-migrate <command> [options]
 
 Commands:
-  create  create new migration
-  down    migrate one step down
-  init    create configuration file
-  list    list migrations
-  to      migrate to selected migration
-  up      migrate one step up
+  codegen  generate types from database metadata
+  create   create new migration
+  down     migrate one step down
+  init     create configuration file
+  list     list migrations
+  to       migrate to selected migration
+  up       migrate one step up
 
 For more info, run any command with the `--help` flag:
   $ kysely-migrate create --help

@@ -3,6 +3,7 @@ import { intro, outro } from '@clack/prompts'
 import { cac } from 'cac'
 import pc from 'picocolors'
 
+import { type CodegenOptions, codegen } from './commands/codegen.js'
 import { type CreateOptions, create } from './commands/create.js'
 import { type DownOptions, down } from './commands/down.js'
 import { type InitOptions, init } from './commands/init.js'
@@ -12,6 +13,17 @@ import { type UpOptions, up } from './commands/up.js'
 import { version } from './version.js'
 
 const cli = cac('kysely-migrate')
+
+cli
+  .command('codegen', 'generate types from database metadata')
+  .option('-c, --config <path>', '[string] path to config file')
+  .option(
+    '-d, --debug',
+    '[boolean] debug generated types against kysely-codegen package',
+  )
+  .option('-r, --root <path>', '[string] root path to resolve config from')
+  .example((name) => `${name} codegen`)
+  .action(async (options: CodegenOptions) => await codegen(options))
 
 cli
   .command('create', 'create new migration')

@@ -2,11 +2,11 @@ import { existsSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { setTimeout as sleep } from 'node:timers/promises'
 import { spinner } from '@clack/prompts'
-import type { MigrationResultSet } from 'kysely'
-import pc from 'picocolors'
+import { type MigrationResultSet } from 'kysely'
 
 import { findConfig } from '../utils/findConfig.js'
 import { getAppliedMigrationsCount } from '../utils/getAppliedMigrationsCount.js'
+import { getMigrator } from '../utils/getMigrator.js'
 import { loadConfig } from '../utils/loadConfig.js'
 import { logResultSet } from '../utils/logResultSet.js'
 
@@ -18,19 +18,15 @@ export type UpOptions = {
 
 export async function up(options: UpOptions) {
   // Get cli config file
-  const configPath = await findConfig(options)
-  if (!configPath) {
-    if (options.config)
-      throw new Error(`Config not found at ${pc.gray(options.config)}`)
-    throw new Error('Config not found')
-  }
+  const configPath = await findConfig(options, true)
 
   const config = await loadConfig({ configPath })
+  const migrator = getMigrator(config)
 
-  const migrationsDir = config.out
+  const migrationsDir = config.migrationFolder
   if (!existsSync(migrationsDir)) await mkdir(migrationsDir)
 
-  const migrations = await config.migrator.getMigrations()
+  const migrations = await migrator.getMigrations()
   const pendingMigrations = migrations.filter((m) => !m.executedAt)
 
   if (pendingMigrations.length === 0) return 'No pending migrations.'
@@ -40,8 +36,8 @@ export async function up(options: UpOptions) {
   await sleep(500) // so spinner has a chance :)
 
   let resultSet: MigrationResultSet
-  if (options.latest) resultSet = await config.migrator.migrateToLatest()
-  else resultSet = await config.migrator.migrateUp()
+  if (options.latest) resultSet = await migrator.migrateToLatest()
+  else resultSet = await migrator.migrateUp()
 
   const { error, results = [] } = resultSet
   s.stop('Ran migrations', error ? 1 : 0)
