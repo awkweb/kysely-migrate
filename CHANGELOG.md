@@ -1,5 +1,11 @@
 # kysely-migrate
 
+## 0.0.6
+
+### Patch Changes
+
+- [`47218b8`](https://github.com/tmm/kysely-migrate/commit/47218b8a7b218cec1863b04e49f2276f984261a0) Thanks [@tmm](https://github.com/tmm)! - Updated DB property value case to match original table name
+
 ## 0.0.5
 
 ### Patch Changes
