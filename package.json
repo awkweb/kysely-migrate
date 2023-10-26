@@ -1,7 +1,7 @@
 {
   "name": "kysely-migrate",
   "description": "Kysely migrations and codegen CLI",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -97,16 +97,31 @@
     "typescript": "5.2.2",
     "vitest": "^0.34.5"
   },
-  "contributors": ["tmm@awkweb.com"],
+  "contributors": [
+    "tmm@awkweb.com"
+  ],
   "funding": "https://github.com/sponsors/tmm",
-  "keywords": ["kysely", "cli", "migrate", "migrations", "codegen"],
+  "keywords": [
+    "kysely",
+    "cli",
+    "migrate",
+    "migrations",
+    "codegen"
+  ],
   "packageManager": "pnpm@8.8.0",
   "simple-git-hooks": {
     "pre-commit": "pnpm format && pnpm lint:fix"
   },
   "knip": {
-    "entry": ["src/**/*.ts!", "src/exports/index.ts!"],
-    "ignoreDependencies": ["kysely-codegen"],
-    "project": [".scripts/**/*.ts"]
+    "entry": [
+      "src/**/*.ts!",
+      "src/exports/index.ts!"
+    ],
+    "ignoreDependencies": [
+      "kysely-codegen"
+    ],
+    "project": [
+      ".scripts/**/*.ts"
+    ]
   }
 }
