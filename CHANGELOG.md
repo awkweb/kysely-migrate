@@ -1,5 +1,11 @@
 # kysely-migrate
 
+## 0.0.8
+
+### Patch Changes
+
+- [`f8e712f`](https://github.com/tmm/kysely-migrate/commit/f8e712f910c3eee5e142c1fd3684fce7b8603da5) Thanks [@tmm](https://github.com/tmm)! - Added wrapper types to codegen
+
 ## 0.0.7
 
 ### Patch Changes
