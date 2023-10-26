@@ -2,7 +2,6 @@ import { setTimeout as sleep } from 'node:timers/promises'
 import { dirname, relative } from 'path'
 import { capitalCase } from 'change-case'
 import { writeFile } from 'fs/promises'
-import { Cli } from 'kysely-codegen'
 import pc from 'picocolors'
 
 import { spinner } from '@clack/prompts'
@@ -42,7 +41,7 @@ export async function codegen(options: CodegenOptions) {
   await writeFile(config.codegen.out, content)
   s.stop('Generated types')
 
-  process.stdout.write(`${pc.gray(S_BAR)}\n`)
+  if (tables.length) process.stdout.write(`${pc.gray(S_BAR)}\n`)
 
   for (const table of tables) {
     const count = table.columns.length
@@ -59,6 +58,8 @@ export async function codegen(options: CodegenOptions) {
 
   const kyselyCodegenOptions = config.codegen['kysely-codegen']
   if (kyselyCodegenOptions) {
+    const { Cli } = await import('kysely-codegen').catch(() => ({ Cli: null }))
+    if (!Cli) throw new Error('`kysely-codegen` not installed.')
     const defaultOptions = {
       camelCase: false,
       dialectName: config.codegen.dialect,
