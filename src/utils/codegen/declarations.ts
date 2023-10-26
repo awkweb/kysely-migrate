@@ -14,68 +14,25 @@ export const kyselyGeneratedImportSpecifier = factory.createImportSpecifier(
   kyselyGeneratedIdentifier,
 )
 
-const columnIdentifier = factory.createIdentifier('c')
-const selectIdentifier = factory.createIdentifier('s')
-const insertIdentifier = factory.createIdentifier('i')
-const updateIdentifier = factory.createIdentifier('i')
+export const kyselyInsertableIdentifier = factory.createIdentifier('Insertable')
+export const kyselyInsertableImportSpecifier = factory.createImportSpecifier(
+  true,
+  undefined,
+  kyselyInsertableIdentifier,
+)
 
-export const generatedIdentifier = factory.createIdentifier('Generated')
-export const generatedTypeAlias = factory.createTypeAliasDeclaration(
-  [factory.createToken(SyntaxKind.ExportKeyword)],
-  generatedIdentifier,
-  [
-    factory.createTypeParameterDeclaration(
-      undefined,
-      columnIdentifier,
-      undefined,
-      undefined,
-    ),
-  ],
-  factory.createConditionalTypeNode(
-    factory.createTypeReferenceNode(columnIdentifier, undefined),
-    factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createInferTypeNode(
-        factory.createTypeParameterDeclaration(
-          undefined,
-          selectIdentifier,
-          undefined,
-          undefined,
-        ),
-      ),
-      factory.createInferTypeNode(
-        factory.createTypeParameterDeclaration(
-          undefined,
-          insertIdentifier,
-          undefined,
-          undefined,
-        ),
-      ),
-      factory.createInferTypeNode(
-        factory.createTypeParameterDeclaration(
-          undefined,
-          updateIdentifier,
-          undefined,
-          undefined,
-        ),
-      ),
-    ]),
-    factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createTypeReferenceNode(selectIdentifier, undefined),
-      factory.createUnionTypeNode([
-        factory.createTypeReferenceNode(insertIdentifier, undefined),
-        factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
-      ]),
-      factory.createTypeReferenceNode(updateIdentifier, undefined),
-    ]),
-    factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createTypeReferenceNode(columnIdentifier, undefined),
-      factory.createUnionTypeNode([
-        factory.createTypeReferenceNode(columnIdentifier, undefined),
-        factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
-      ]),
-      factory.createTypeReferenceNode(columnIdentifier, undefined),
-    ]),
-  ),
+export const kyselySelectableIdentifier = factory.createIdentifier('Selectable')
+export const kyselySelectableImportSpecifier = factory.createImportSpecifier(
+  true,
+  undefined,
+  kyselySelectableIdentifier,
+)
+
+export const kyselyUpdateableIdentifier = factory.createIdentifier('Updateable')
+export const kyselyUpdateableImportSpecifier = factory.createImportSpecifier(
+  true,
+  undefined,
+  kyselyUpdateableIdentifier,
 )
 
 export const jsonIdentifier = factory.createIdentifier('Json')

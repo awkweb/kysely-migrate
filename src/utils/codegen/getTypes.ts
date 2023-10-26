@@ -2,6 +2,7 @@ import { capitalCase } from 'change-case'
 import { type TableMetadata } from 'kysely'
 import {
   EmitHint,
+  type Identifier,
   type ImportSpecifier,
   NewLineKind,
   ScriptTarget,
@@ -16,6 +17,12 @@ import {
 import {
   kyselyGeneratedIdentifier,
   kyselyGeneratedImportSpecifier,
+  kyselyInsertableIdentifier,
+  kyselyInsertableImportSpecifier,
+  kyselySelectableIdentifier,
+  kyselySelectableImportSpecifier,
+  kyselyUpdateableIdentifier,
+  kyselyUpdateableImportSpecifier,
 } from './declarations.js'
 import { mysqlDefinitions } from './definitions/mysql.js'
 import { postgresDefinitions } from './definitions/postgres.js'
@@ -122,6 +129,44 @@ export function getTypes(
       factory.createTypeLiteralNode(columnProperties),
     )
     nodes.push(tableTypeAlias)
+
+    // Create `Selectable`, `Insertable` and `Updateable` wrappers for table type
+    if (importsMap.has('kysely')) {
+      const kyselyImports = importsMap.get('kysely')!
+      kyselyImports.add(kyselySelectableImportSpecifier)
+      kyselyImports.add(kyselyInsertableImportSpecifier)
+      kyselyImports.add(kyselyUpdateableImportSpecifier)
+      importsMap.set('kysely', kyselyImports)
+    } else
+      importsMap.set(
+        'kysely',
+        new Set([
+          kyselySelectableImportSpecifier,
+          kyselyInsertableImportSpecifier,
+          kyselyUpdateableImportSpecifier,
+        ]),
+      )
+
+    function createWrapperTypeAlias(
+      type: 'insertable' | 'selectable' | 'updateable',
+    ) {
+      let identifier: Identifier
+      if (type === 'insertable') identifier = kyselyInsertableIdentifier
+      else if (type === 'selectable') identifier = kyselySelectableIdentifier
+      else identifier = kyselyUpdateableIdentifier
+      return factory.createTypeAliasDeclaration(
+        [factory.createModifier(SyntaxKind.ExportKeyword)],
+        factory.createIdentifier(`${tableTypeName}${capitalCase(type)}`),
+        undefined,
+        factory.createTypeReferenceNode(identifier, [
+          factory.createTypeReferenceNode(tableTypeIdentifier, undefined),
+        ]),
+      )
+    }
+    const insertableTypeAlias = createWrapperTypeAlias('insertable')
+    const selectableTypeAlias = createWrapperTypeAlias('selectable')
+    const updateableTypeAlias = createWrapperTypeAlias('updateable')
+    nodes.push(selectableTypeAlias, insertableTypeAlias, updateableTypeAlias)
 
     // Create table type property for encompassing `DB` type
     const tableDbTypeParameter = factory.createPropertySignature(
