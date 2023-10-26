@@ -1,5 +1,11 @@
 # kysely-migrate
 
+## 0.0.7
+
+### Patch Changes
+
+- [`516575b`](https://github.com/tmm/kysely-migrate/commit/516575b781c1aefc6832bc8e6818ec935fa57592) Thanks [@tmm](https://github.com/tmm)! - Switched to interface for DB type
+
 ## 0.0.6
 
 ### Patch Changes
