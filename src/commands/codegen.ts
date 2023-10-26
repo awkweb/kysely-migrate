@@ -29,7 +29,8 @@ export async function codegen(options: CodegenOptions) {
 
   const s = spinner()
   s.start('Generating types')
-  await sleep(250) // so spinner has a chance :)
+  // so spinner has a chance :)
+  if (config._spinnerMs) await sleep(config._spinnerMs)
 
   const tables = await db.introspection.getTables()
 

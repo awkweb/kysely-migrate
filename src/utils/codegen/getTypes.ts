@@ -38,7 +38,7 @@ export function getTypes(
   dialect: Dialect | undefined,
   customDefinitions: Definitions | undefined = {},
 ) {
-  // TODO: Parse out enums (https://github.com/RobinBlomberg/kysely-codegen/blob/b749a677e6bfd7370559767e57e4c69746898f94/src/dialects/mysql/mysql-introspector.ts#L28-L46)
+  // TODO: Parse enums (https://github.com/RobinBlomberg/kysely-codegen/blob/b749a677e6bfd7370559767e57e4c69746898f94/src/dialects/mysql/mysql-introspector.ts#L28-L46)
   // TODO: Tests for different dialects, custom definitions, table metadata, etc.
   // TODO: Test out against Postgres https://github.com/OpenPipe/OpenPipe/blob/409b1b536dbfd79f85551f936fd68409c36223e2/app/src/types/kysely-codegen.types.ts
 

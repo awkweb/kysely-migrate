@@ -70,7 +70,8 @@ export async function to(options: ToOptions) {
 
   const s = spinner()
   s.start('Running migrations')
-  await sleep(500) // so spinner has a chance :)
+  // so spinner has a chance :)
+  if (config._spinnerMs) await sleep(config._spinnerMs)
 
   const resultSet = await migrator.migrateTo(migration as string)
 

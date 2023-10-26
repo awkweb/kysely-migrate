@@ -15,6 +15,7 @@ export type Config = {
   path?: FileMigrationProviderPath | undefined
   migrationFolder: string
   migrator?: Migrator | undefined
+  _spinnerMs?: number | undefined
 }
 
 type Codegen =

@@ -44,7 +44,8 @@ export async function down(options: DownOptions) {
 
   const s = spinner()
   s.start('Running migrations')
-  await sleep(500) // so spinner has a chance :)
+  // so spinner has a chance :)
+  if (config._spinnerMs) await sleep(config._spinnerMs)
 
   let resultSet: MigrationResultSet
   if (options.reset) {
