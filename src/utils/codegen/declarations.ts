@@ -7,6 +7,13 @@ export const kyselyColumnTypeImportSpecifier = factory.createImportSpecifier(
   kyselyColumnTypeIdentifier,
 )
 
+export const kyselyGeneratedIdentifier = factory.createIdentifier('Generated')
+export const kyselyGeneratedImportSpecifier = factory.createImportSpecifier(
+  true,
+  undefined,
+  kyselyGeneratedIdentifier,
+)
+
 const columnIdentifier = factory.createIdentifier('c')
 const selectIdentifier = factory.createIdentifier('s')
 const insertIdentifier = factory.createIdentifier('i')

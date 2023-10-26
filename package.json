@@ -37,7 +37,8 @@
     "!src/**/*.test-d.ts"
   ],
   "bin": {
-    "kysely-migrate": "./dist/esm/cli.js"
+    "kysely-migrate": "./dist/esm/cli.js",
+    "km": "./dist/esm/cli.js"
   },
   "sideEffects": false,
   "type": "module",
@@ -96,31 +97,16 @@
     "typescript": "5.2.2",
     "vitest": "^0.34.5"
   },
-  "contributors": [
-    "tmm@awkweb.com"
-  ],
+  "contributors": ["tmm@awkweb.com"],
   "funding": "https://github.com/sponsors/tmm",
-  "keywords": [
-    "kysely",
-    "cli",
-    "migrate",
-    "migrations",
-    "codegen"
-  ],
+  "keywords": ["kysely", "cli", "migrate", "migrations", "codegen"],
   "packageManager": "pnpm@8.8.0",
   "simple-git-hooks": {
     "pre-commit": "pnpm format && pnpm lint:fix"
   },
   "knip": {
-    "entry": [
-      "src/**/*.ts!",
-      "src/exports/index.ts!"
-    ],
-    "ignoreDependencies": [
-      "kysely-codegen"
-    ],
-    "project": [
-      ".scripts/**/*.ts"
-    ]
+    "entry": ["src/**/*.ts!", "src/exports/index.ts!"],
+    "ignoreDependencies": ["kysely-codegen"],
+    "project": [".scripts/**/*.ts"]
   }
 }

@@ -14,9 +14,8 @@ import {
 } from 'typescript'
 
 import {
-  generatedIdentifier,
-  generatedTypeAlias,
-  kyselyColumnTypeImportSpecifier,
+  kyselyGeneratedIdentifier,
+  kyselyGeneratedImportSpecifier,
 } from './declarations.js'
 import { mysqlDefinitions } from './definitions/mysql.js'
 import { postgresDefinitions } from './definitions/postgres.js'
@@ -92,15 +91,15 @@ export function getTypes(
       else if (column.hasDefaultValue || column.isAutoIncrementing) {
         if (importsMap.has('kysely')) {
           const kyselyImports = importsMap.get('kysely')!
-          kyselyImports.add(kyselyColumnTypeImportSpecifier)
+          kyselyImports.add(kyselyGeneratedImportSpecifier)
           importsMap.set('kysely', kyselyImports)
         } else {
-          importsMap.set('kysely', new Set([kyselyColumnTypeImportSpecifier]))
+          importsMap.set('kysely', new Set([kyselyGeneratedImportSpecifier]))
         }
-        typeDeclarations.add(generatedTypeAlias)
-        columnTypeNode = factory.createTypeReferenceNode(generatedIdentifier, [
-          type,
-        ])
+        columnTypeNode = factory.createTypeReferenceNode(
+          kyselyGeneratedIdentifier,
+          [type],
+        )
       } else columnTypeNode = type
 
       // Create property
@@ -153,11 +152,12 @@ export function getTypes(
   }
 
   // Create `DB` type alias
-  const dbNode = factory.createTypeAliasDeclaration(
+  const dbNode = factory.createInterfaceDeclaration(
     [factory.createModifier(SyntaxKind.ExportKeyword)],
     factory.createIdentifier('DB'),
     undefined,
-    factory.createTypeLiteralNode(dbTypeParameters),
+    undefined,
+    dbTypeParameters,
   )
   nodes.push(dbNode)
 
