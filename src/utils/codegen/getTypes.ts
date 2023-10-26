@@ -127,7 +127,7 @@ export function getTypes(
     // Create table type property for encompassing `DB` type
     const tableDbTypeParameter = factory.createPropertySignature(
       undefined,
-      tableTypeIdentifier,
+      factory.createIdentifier(table.name),
       undefined,
       factory.createTypeReferenceNode(tableTypeIdentifier, undefined),
     )
