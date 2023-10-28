@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
-import { setTimeout as sleep } from 'node:timers/promises'
-import { cancel, isCancel, select, spinner } from '@clack/prompts'
+import { cancel, isCancel, select } from '@clack/prompts'
 import pc from 'picocolors'
 
+import { spinner } from '../utils/clack.js'
 import { findConfig } from '../utils/findConfig.js'
 import { getAppliedMigrationsCount } from '../utils/getAppliedMigrationsCount.js'
 import { getMigrator } from '../utils/getMigrator.js'
@@ -68,10 +68,8 @@ export async function to(options: ToOptions) {
     }
   }
 
-  const s = spinner()
-  s.start('Running migrations')
-  // so spinner has a chance :)
-  if (config._spinnerMs) await sleep(config._spinnerMs)
+  const s = spinner(config._spinnerMs)
+  await s.start('Running migrations')
 
   const resultSet = await migrator.migrateTo(migration as string)
 

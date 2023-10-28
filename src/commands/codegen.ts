@@ -1,11 +1,9 @@
-import { setTimeout as sleep } from 'node:timers/promises'
-import { dirname, relative } from 'path'
+import { relative } from 'path'
 import { capitalCase } from 'change-case'
 import { writeFile } from 'fs/promises'
 import pc from 'picocolors'
 
-import { spinner } from '@clack/prompts'
-import { S_BAR, S_SUCCESS, message } from '../utils/clack.js'
+import { S_BAR, S_SUCCESS, message, spinner } from '../utils/clack.js'
 import { getTypes } from '../utils/codegen/getTypes.js'
 import { findConfig } from '../utils/findConfig.js'
 import { loadConfig } from '../utils/loadConfig.js'
@@ -27,19 +25,21 @@ export async function codegen(options: CodegenOptions) {
   if (!config.codegen)
     throw new Error('`codegen` config required to generate types.')
 
-  const s = spinner()
-  s.start('Generating types')
-  // so spinner has a chance :)
-  if (config._spinnerMs) await sleep(config._spinnerMs)
+  const s = spinner(config._spinnerMs)
+  await s.start('Generating types')
 
   const tables = await db.introspection.getTables()
 
+  // TODO: Add support for enums + schemas
+  // - mysql https://github.com/RobinBlomberg/kysely-codegen/blob/b749a677e6bfd7370559767e57e4c69746898f94/src/dialects/mysql/mysql-introspector.ts#L28-L46
+  // - postgres https://github.com/RobinBlomberg/kysely-codegen/blob/b749a677e6bfd7370559767e57e4c69746898f94/src/dialects/postgres/postgres-introspector.ts#L22-L36
   const content = getTypes(
     tables,
     config.codegen.dialect,
     config.codegen.definitions,
   )
   await writeFile(config.codegen.out, content)
+
   s.stop('Generated types')
 
   if (tables.length) process.stdout.write(`${pc.gray(S_BAR)}\n`)
@@ -55,31 +55,6 @@ export async function codegen(options: CodegenOptions) {
       )} = ${pc.yellow('{')} ${properties} ${pc.yellow('}')}`,
       { symbol: pc.green(S_SUCCESS) },
     )
-  }
-
-  const kyselyCodegenOptions = config.codegen['kysely-codegen']
-  if (kyselyCodegenOptions) {
-    const { Cli } = await import('kysely-codegen').catch(() => ({ Cli: null }))
-    if (!Cli) throw new Error('`kysely-codegen` not installed.')
-    const defaultOptions = {
-      camelCase: false,
-      dialectName: config.codegen.dialect,
-      envFile: undefined,
-      excludePattern: undefined,
-      includePattern: undefined,
-      logLevel: 0,
-      outFile: `${dirname(config.codegen.out)}/types-kc.ts`,
-      print: false,
-      schema: undefined,
-      typeOnlyImports: true,
-      verify: false,
-    }
-    const cliOptions =
-      typeof kyselyCodegenOptions === 'object'
-        ? { ...defaultOptions, ...kyselyCodegenOptions }
-        : { ...defaultOptions, url: kyselyCodegenOptions }
-    const cli = new Cli()
-    await cli.generate(cliOptions)
   }
 
   const codegenRelativeFilePath = relative(process.cwd(), config.codegen.out)

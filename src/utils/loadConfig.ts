@@ -13,7 +13,6 @@ export async function loadConfig(
   const res = await bundleRequire({ filepath: configPath })
   let config = res.mod.default
   if (config.default) config = config.default
-  if (typeof config !== 'function') return { _spinnerMs: 250, ...config }
-  const resolved = await config()
-  return { _spinnerMs: 250, ...resolved }
+  if (typeof config !== 'function') return config
+  return config()
 }

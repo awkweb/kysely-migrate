@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
-import { setTimeout as sleep } from 'node:timers/promises'
-import { cancel, confirm, isCancel, spinner } from '@clack/prompts'
+import { cancel, confirm, isCancel } from '@clack/prompts'
 import { type MigrationResultSet } from 'kysely'
 
+import { spinner } from '../utils/clack.js'
 import { findConfig } from '../utils/findConfig.js'
 import { getAppliedMigrationsCount } from '../utils/getAppliedMigrationsCount.js'
 import { getMigrator } from '../utils/getMigrator.js'
@@ -42,14 +42,12 @@ export async function down(options: DownOptions) {
     if (!shouldContinue) return 'Applied 0 migrations.'
   }
 
-  const s = spinner()
-  s.start('Running migrations')
-  // so spinner has a chance :)
-  if (config._spinnerMs) await sleep(config._spinnerMs)
+  const s = spinner(config._spinnerMs)
+  await s.start('Running migrations')
 
   let resultSet: MigrationResultSet
   if (options.reset) {
-    // TODO: migrator.migrateTo(NO_MIGRATIONS) throwing when run with linked package
+    // migrator.migrateTo(NO_MIGRATIONS) throwing when run with linked package so handling manually
     const migration = migrations[0]!
     resultSet = await migrator.migrateTo(migration.name)
     if (!resultSet.error) {

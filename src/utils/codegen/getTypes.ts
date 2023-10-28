@@ -1,5 +1,5 @@
 import { capitalCase } from 'change-case'
-import { type TableMetadata } from 'kysely'
+import { type ColumnMetadata, type TableMetadata } from 'kysely'
 import {
   EmitHint,
   type Identifier,
@@ -12,9 +12,11 @@ import {
   createPrinter,
   createSourceFile,
   factory,
+  isTypeReferenceNode,
 } from 'typescript'
 
 import {
+  kyselyColumnTypeIdentifier,
   kyselyGeneratedIdentifier,
   kyselyGeneratedImportSpecifier,
   kyselyInsertableIdentifier,
@@ -23,6 +25,8 @@ import {
   kyselySelectableImportSpecifier,
   kyselyUpdateableIdentifier,
   kyselyUpdateableImportSpecifier,
+  unwrapColumnTypeIdentifier,
+  unwrapColumnTypeTypeAlias,
 } from './declarations.js'
 import { mysqlDefinitions } from './definitions/mysql.js'
 import { postgresDefinitions } from './definitions/postgres.js'
@@ -44,10 +48,6 @@ export function getTypes(
   dialect: Dialect | undefined,
   customDefinitions: Definitions | undefined = {},
 ) {
-  // TODO: Parse enums (https://github.com/RobinBlomberg/kysely-codegen/blob/b749a677e6bfd7370559767e57e4c69746898f94/src/dialects/mysql/mysql-introspector.ts#L28-L46)
-  // TODO: Tests for different dialects, custom definitions, table metadata, etc.
-  // TODO: Test out against Postgres https://github.com/OpenPipe/OpenPipe/blob/409b1b536dbfd79f85551f936fd68409c36223e2/app/src/types/kysely-codegen.types.ts
-
   // Get dialect node mapping
   if (!dialect && !customDefinitions)
     throw new Error(
@@ -68,53 +68,11 @@ export function getTypes(
     // Create type property for each column
     const columnProperties = []
     for (const column of table.columns) {
-      // Get type from lookup
-      let type: TypeNode
-      if (column.dataType in definitions) {
-        const definition = definitions[
-          column.dataType as keyof typeof definitions
-        ] as TypeNode | DefinitionNode
-        if ('value' in definition) {
-          type = definition.value
-          for (const [name, imports] of Object.entries(definition.imports)) {
-            if (importsMap.has(name)) {
-              const nameImports = importsMap.get(name)!
-              importsMap.set(name, new Set([...nameImports, ...imports]))
-            } else importsMap.set(name, new Set(imports))
-          }
-          for (const declaration of definition.declarations) {
-            typeDeclarations.add(declaration)
-          }
-        } else type = definition
-      } else type = factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)
-
-      // Create node based on properties (e.g. nullable, default)
-      let columnTypeNode: TypeNode
-      if (column.isNullable)
-        columnTypeNode = factory.createUnionTypeNode([
-          type,
-          factory.createLiteralTypeNode(factory.createNull()),
-        ])
-      else if (column.hasDefaultValue || column.isAutoIncrementing) {
-        if (importsMap.has('kysely')) {
-          const kyselyImports = importsMap.get('kysely')!
-          kyselyImports.add(kyselyGeneratedImportSpecifier)
-          importsMap.set('kysely', kyselyImports)
-        } else {
-          importsMap.set('kysely', new Set([kyselyGeneratedImportSpecifier]))
-        }
-        columnTypeNode = factory.createTypeReferenceNode(
-          kyselyGeneratedIdentifier,
-          [type],
-        )
-      } else columnTypeNode = type
-
-      // Create property
-      const columnProperty = factory.createPropertySignature(
-        undefined,
-        factory.createIdentifier(column.name),
-        undefined,
-        columnTypeNode,
+      const columnProperty = getColumnType(
+        column,
+        definitions,
+        importsMap,
+        typeDeclarations,
       )
       columnProperties.push(columnProperty)
     }
@@ -147,31 +105,27 @@ export function getTypes(
         ]),
       )
 
-    function createWrapperTypeAlias(
-      type: 'insertable' | 'selectable' | 'updateable',
-    ) {
-      let identifier: Identifier
-      if (type === 'insertable') identifier = kyselyInsertableIdentifier
-      else if (type === 'selectable') identifier = kyselySelectableIdentifier
-      else identifier = kyselyUpdateableIdentifier
-      return factory.createTypeAliasDeclaration(
-        [factory.createModifier(SyntaxKind.ExportKeyword)],
-        factory.createIdentifier(`${tableTypeName}${capitalCase(type)}`),
-        undefined,
-        factory.createTypeReferenceNode(identifier, [
-          factory.createTypeReferenceNode(tableTypeIdentifier, undefined),
-        ]),
-      )
-    }
-    const insertableTypeAlias = createWrapperTypeAlias('insertable')
-    const selectableTypeAlias = createWrapperTypeAlias('selectable')
-    const updateableTypeAlias = createWrapperTypeAlias('updateable')
+    const insertableTypeAlias = createWrapperTypeAlias(
+      tableTypeName,
+      tableTypeIdentifier,
+      'insertable',
+    )
+    const selectableTypeAlias = createWrapperTypeAlias(
+      tableTypeName,
+      tableTypeIdentifier,
+      'selectable',
+    )
+    const updateableTypeAlias = createWrapperTypeAlias(
+      tableTypeName,
+      tableTypeIdentifier,
+      'updateable',
+    )
     nodes.push(selectableTypeAlias, insertableTypeAlias, updateableTypeAlias)
 
     // Create table type property for encompassing `DB` type
     const tableDbTypeParameter = factory.createPropertySignature(
       undefined,
-      factory.createIdentifier(table.name),
+      table.name,
       undefined,
       factory.createTypeReferenceNode(tableTypeIdentifier, undefined),
     )
@@ -219,4 +173,93 @@ export function getTypes(
   }
 
   return content
+}
+
+export function getColumnType(
+  column: ColumnMetadata,
+  definitions: Definitions,
+  importsMap: Map<string, Set<ImportSpecifier>>,
+  typeDeclarations: Set<TypeAliasDeclaration>,
+) {
+  // Get type from lookup
+  let type: TypeNode
+  if (column.dataType in definitions) {
+    const definition = definitions[
+      column.dataType as keyof typeof definitions
+    ] as TypeNode | DefinitionNode
+    if ('value' in definition) {
+      type = definition.value
+      for (const [name, imports] of Object.entries(definition.imports)) {
+        if (importsMap.has(name)) {
+          const nameImports = importsMap.get(name)!
+          importsMap.set(name, new Set([...nameImports, ...imports]))
+        } else importsMap.set(name, new Set(imports))
+      }
+      for (const declaration of definition.declarations) {
+        typeDeclarations.add(declaration)
+      }
+    } else type = definition
+  } else type = factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)
+
+  // Create node based on properties (e.g. nullable, default)
+  let columnTypeNode: TypeNode
+  if (column.isNullable)
+    columnTypeNode = factory.createUnionTypeNode([
+      type,
+      factory.createLiteralTypeNode(factory.createNull()),
+    ])
+  else if (column.hasDefaultValue || column.isAutoIncrementing) {
+    if (importsMap.has('kysely')) {
+      const kyselyImports = importsMap.get('kysely')!
+      kyselyImports.add(kyselyGeneratedImportSpecifier)
+      importsMap.set('kysely', kyselyImports)
+    } else {
+      importsMap.set('kysely', new Set([kyselyGeneratedImportSpecifier]))
+    }
+
+    // Unwrap declarations already contained in `ColumnType`
+    if (
+      isTypeReferenceNode(type) &&
+      (type.typeName as Identifier).escapedText ===
+        kyselyColumnTypeIdentifier.escapedText
+    ) {
+      if (!typeDeclarations.has(unwrapColumnTypeTypeAlias))
+        typeDeclarations.add(unwrapColumnTypeTypeAlias)
+      columnTypeNode = factory.createTypeReferenceNode(
+        kyselyGeneratedIdentifier,
+        [factory.createTypeReferenceNode(unwrapColumnTypeIdentifier, [type])],
+      )
+    } else
+      columnTypeNode = factory.createTypeReferenceNode(
+        kyselyGeneratedIdentifier,
+        [type],
+      )
+  } else columnTypeNode = type
+
+  // Create property
+  return factory.createPropertySignature(
+    undefined,
+    column.name,
+    undefined,
+    columnTypeNode,
+  )
+}
+
+function createWrapperTypeAlias(
+  tableTypeName: string,
+  tableTypeIdentifier: Identifier,
+  type: 'insertable' | 'selectable' | 'updateable',
+) {
+  let identifier: Identifier
+  if (type === 'insertable') identifier = kyselyInsertableIdentifier
+  else if (type === 'selectable') identifier = kyselySelectableIdentifier
+  else identifier = kyselyUpdateableIdentifier
+  return factory.createTypeAliasDeclaration(
+    [factory.createModifier(SyntaxKind.ExportKeyword)],
+    factory.createIdentifier(`${tableTypeName}${capitalCase(type)}`),
+    undefined,
+    factory.createTypeReferenceNode(identifier, [
+      factory.createTypeReferenceNode(tableTypeIdentifier, undefined),
+    ]),
+  )
 }

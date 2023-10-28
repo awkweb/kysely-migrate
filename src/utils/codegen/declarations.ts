@@ -105,3 +105,68 @@ export const jsonPrimitiveTypeAlias = factory.createTypeAliasDeclaration(
     factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   ]),
 )
+
+const columnIdentifier = factory.createIdentifier('c')
+const selectIdentifier = factory.createIdentifier('s')
+const insertIdentifier = factory.createIdentifier('i')
+const updateIdentifier = factory.createIdentifier('u')
+
+export const unwrapColumnTypeIdentifier =
+  factory.createIdentifier('UnwrapColumnType')
+export const unwrapColumnTypeTypeAlias = factory.createTypeAliasDeclaration(
+  [factory.createToken(SyntaxKind.ExportKeyword)],
+  unwrapColumnTypeIdentifier,
+  [
+    factory.createTypeParameterDeclaration(
+      undefined,
+      columnIdentifier,
+      undefined,
+      undefined,
+    ),
+  ],
+  factory.createConditionalTypeNode(
+    factory.createTypeReferenceNode(columnIdentifier, undefined),
+    factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+      factory.createInferTypeNode(
+        factory.createTypeParameterDeclaration(
+          undefined,
+          selectIdentifier,
+          undefined,
+          undefined,
+        ),
+      ),
+      factory.createInferTypeNode(
+        factory.createTypeParameterDeclaration(
+          undefined,
+          insertIdentifier,
+          undefined,
+          undefined,
+        ),
+      ),
+      factory.createInferTypeNode(
+        factory.createTypeParameterDeclaration(
+          undefined,
+          updateIdentifier,
+          undefined,
+          undefined,
+        ),
+      ),
+    ]),
+    factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+      factory.createTypeReferenceNode(selectIdentifier, undefined),
+      factory.createUnionTypeNode([
+        factory.createTypeReferenceNode(insertIdentifier, undefined),
+        factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
+      ]),
+      factory.createTypeReferenceNode(updateIdentifier, undefined),
+    ]),
+    factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+      factory.createTypeReferenceNode(columnIdentifier, undefined),
+      factory.createUnionTypeNode([
+        factory.createTypeReferenceNode(columnIdentifier, undefined),
+        factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
+      ]),
+      factory.createTypeReferenceNode(columnIdentifier, undefined),
+    ]),
+  ),
+)

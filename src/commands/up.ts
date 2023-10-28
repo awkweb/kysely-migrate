@@ -1,9 +1,8 @@
 import { existsSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
-import { setTimeout as sleep } from 'node:timers/promises'
-import { spinner } from '@clack/prompts'
 import { type MigrationResultSet } from 'kysely'
 
+import { spinner } from '../utils/clack.js'
 import { findConfig } from '../utils/findConfig.js'
 import { getAppliedMigrationsCount } from '../utils/getAppliedMigrationsCount.js'
 import { getMigrator } from '../utils/getMigrator.js'
@@ -31,10 +30,8 @@ export async function up(options: UpOptions) {
 
   if (pendingMigrations.length === 0) return 'No pending migrations.'
 
-  const s = spinner()
-  s.start('Running migrations')
-  // so spinner has a chance :)
-  if (config._spinnerMs) await sleep(config._spinnerMs)
+  const s = spinner(config._spinnerMs)
+  await s.start('Running migrations')
 
   let resultSet: MigrationResultSet
   if (options.latest) resultSet = await migrator.migrateToLatest()
