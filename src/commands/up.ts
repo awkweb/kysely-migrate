@@ -41,5 +41,7 @@ export async function up(options: UpOptions) {
   s.stop('Ran migrations', error ? 1 : 0)
 
   logResultSet(resultSet)
+
+  if (error) throw new Error('Failed running migrations.')
   return getAppliedMigrationsCount(results)
 }

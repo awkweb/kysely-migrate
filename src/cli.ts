@@ -89,6 +89,6 @@ try {
   if (result) outro(result)
   process.exit(0)
 } catch (error) {
-  outro(pc.red(`Error: ${(error as Error).message}`))
+  outro(pc.red((error as Error).message))
   process.exit(1)
 }
