@@ -1,5 +1,11 @@
 # kysely-migrate
 
+## 0.0.10
+
+### Patch Changes
+
+- [`a4d261e`](https://github.com/tmm/kysely-migrate/commit/a4d261e2a4cdf92015b9397f9b9894417d641fd5) Thanks [@tmm](https://github.com/tmm)! - Updated exit code for failed migrations
+
 ## 0.0.9
 
 ### Patch Changes
