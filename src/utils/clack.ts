@@ -1,7 +1,6 @@
 import { setTimeout as sleep } from 'node:timers/promises'
 import {
   type LogMessageOptions,
-  log,
   spinner as clack_spinner,
 } from '@clack/prompts'
 import isUnicodeSupported from 'is-unicode-supported'
@@ -39,19 +38,19 @@ export function message(message = '', options: LogMessageOptions = {}) {
 export function spinner(ms = 250) {
   const s = clack_spinner()
   return {
-    async start(message: string) {
-      if (isCI) log.info(message)
+    async start(msg: string) {
+      if (isCI) message(msg, { symbol: pc.blue(S_INFO) })
       else {
-        s.start(message)
+        s.start(msg)
         // so spinner has a chance :)
         if (ms) await sleep(ms)
       }
     },
-    stop(message: string, error: unknown = undefined) {
+    stop(msg: string, error: unknown = undefined) {
       if (isCI) {
-        if (error) log.error(message)
-        else log.success(message)
-      } else s.stop(message, error ? 1 : 0)
+        if (error) message(msg, { symbol: pc.red(S_ERROR) })
+        else message(msg, { symbol: pc.green(S_SUCCESS) })
+      } else s.stop(msg, error ? 1 : 0)
     },
   }
 }
