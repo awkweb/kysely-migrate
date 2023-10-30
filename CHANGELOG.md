@@ -1,5 +1,11 @@
 # kysely-migrate
 
+## 0.0.11
+
+### Patch Changes
+
+- [`fd98c32`](https://github.com/tmm/kysely-migrate/commit/fd98c32d8e4ead2beb17fcfac332d62e74443a85) Thanks [@tmm](https://github.com/tmm)! - Updated CI logging
+
 ## 0.0.10
 
 ### Patch Changes
