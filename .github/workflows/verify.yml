@@ -72,6 +72,10 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # TODO: Add service containers and test against different dialects
+    # strategy:
+    #   matrix:
+    #     dialects: ['mysql', 'postgres', 'sqlite']
 
     steps:
       - name: Clone repository
