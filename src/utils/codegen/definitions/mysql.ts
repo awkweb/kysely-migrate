@@ -58,6 +58,15 @@ export const mysqlDefinitions = {
     value: factory.createTypeReferenceNode(decimalIdentifier, undefined),
   },
   double: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+  enum(column, table, enums) {
+    const values = enums.get(`${table.schema}.${table.name}.${column.name}`)
+    if (!values) return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)
+    return factory.createUnionTypeNode(
+      values.map((value) =>
+        factory.createLiteralTypeNode(factory.createStringLiteral(value)),
+      ),
+    )
+  },
   float: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   int: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   json: {

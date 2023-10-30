@@ -4,6 +4,7 @@ import { writeFile } from 'fs/promises'
 import pc from 'picocolors'
 
 import { S_BAR, S_SUCCESS, message, spinner } from '../utils/clack.js'
+import { getEnums } from '../utils/codegen/getEnums.js'
 import { getTypes } from '../utils/codegen/getTypes.js'
 import { findConfig } from '../utils/findConfig.js'
 import { loadConfig } from '../utils/loadConfig.js'
@@ -29,12 +30,11 @@ export async function codegen(options: CodegenOptions) {
   await s.start('Generating types')
 
   const tables = await db.introspection.getTables()
+  const enums = await getEnums(db, config.codegen.dialect)
 
-  // TODO: Add support for enums + schemas
-  // - mysql https://github.com/RobinBlomberg/kysely-codegen/blob/b749a677e6bfd7370559767e57e4c69746898f94/src/dialects/mysql/mysql-introspector.ts#L28-L46
-  // - postgres https://github.com/RobinBlomberg/kysely-codegen/blob/b749a677e6bfd7370559767e57e4c69746898f94/src/dialects/postgres/postgres-introspector.ts#L22-L36
   const content = getTypes(
     tables,
+    enums,
     config.codegen.dialect,
     config.codegen.definitions,
   )

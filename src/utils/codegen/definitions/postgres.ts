@@ -57,6 +57,15 @@ export const postgresDefinitions = {
   bytea: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   cidr: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   date: timestamp,
+  enum(column, table, enums) {
+    const values = enums.get(`${table.schema}.${column.name}`)
+    if (!values) return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)
+    return factory.createUnionTypeNode(
+      values.map((value) =>
+        factory.createLiteralTypeNode(factory.createStringLiteral(value)),
+      ),
+    )
+  },
   float4: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   float8: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   inet: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),

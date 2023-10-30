@@ -1,3 +1,4 @@
+import { type ColumnMetadata, type TableMetadata } from 'kysely'
 import {
   type ImportSpecifier,
   type TypeAliasDeclaration,
@@ -10,7 +11,13 @@ export type Dialect = NonNullable<NonNullable<Config['codegen']>['dialect']>
 
 export type Definitions<key extends string = string> = Record<
   key,
-  TypeNode | DefinitionNode
+  | TypeNode
+  | DefinitionNode
+  | ((
+      column: ColumnMetadata,
+      table: TableMetadata,
+      enums: Map<string, string[]>,
+    ) => TypeNode)
 >
 
 export type DefinitionNode = {

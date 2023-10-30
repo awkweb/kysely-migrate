@@ -31,7 +31,7 @@ import {
 import { mysqlDefinitions } from './definitions/mysql.js'
 import { postgresDefinitions } from './definitions/postgres.js'
 import { sqliteDefinitions } from './definitions/sqlite.js'
-import { type DefinitionNode, type Definitions, type Dialect } from './types.js'
+import { type Definitions, type Dialect } from './types.js'
 
 // Useful links:
 // - https://ts-ast-viewer.com
@@ -45,6 +45,7 @@ const dialectDefinitions = {
 
 export function getTypes(
   tableMetadata: TableMetadata[],
+  enums: Map<string, string[]>,
   dialect: Dialect | undefined,
   customDefinitions: Definitions | undefined = {},
 ) {
@@ -70,6 +71,8 @@ export function getTypes(
     for (const column of table.columns) {
       const columnProperty = getColumnType(
         column,
+        table,
+        enums,
         definitions,
         importsMap,
         typeDeclarations,
@@ -78,6 +81,8 @@ export function getTypes(
     }
 
     // Create table type alias
+    // TODO: Handle schemas and views
+    // https://kysely.dev/docs/recipes/schemas
     const tableTypeName = capitalCase(table.name)
     const tableTypeIdentifier = factory.createIdentifier(tableTypeName)
     const tableTypeAlias = factory.createTypeAliasDeclaration(
@@ -177,6 +182,8 @@ export function getTypes(
 
 export function getColumnType(
   column: ColumnMetadata,
+  table: TableMetadata,
+  enums: Map<string, string[]>,
   definitions: Definitions,
   importsMap: Map<string, Set<ImportSpecifier>>,
   typeDeclarations: Set<TypeAliasDeclaration>,
@@ -186,7 +193,7 @@ export function getColumnType(
   if (column.dataType in definitions) {
     const definition = definitions[
       column.dataType as keyof typeof definitions
-    ] as TypeNode | DefinitionNode
+    ] as Definitions[string]
     if ('value' in definition) {
       type = definition.value
       for (const [name, imports] of Object.entries(definition.imports)) {
@@ -198,6 +205,8 @@ export function getColumnType(
       for (const declaration of definition.declarations) {
         typeDeclarations.add(declaration)
       }
+    } else if (typeof definition === 'function') {
+      type = definition(column, table, enums)
     } else type = definition
   } else type = factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)
 
