@@ -39,10 +39,9 @@ export const jsonIdentifier = factory.createIdentifier('Json')
 export const jsonValueIdentifier = factory.createIdentifier('JsonValue')
 export const jsonArrayIdentifier = factory.createIdentifier('JsonArray')
 export const jsonObjectIndentifier = factory.createIdentifier('JsonObject')
-export const jsonPrimitiveIdentifier = factory.createIdentifier('JsonPrimitive')
 
 export const jsonTypeAlias = factory.createTypeAliasDeclaration(
-  [factory.createToken(SyntaxKind.ExportKeyword)],
+  [],
   jsonIdentifier,
   undefined,
   factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
@@ -53,18 +52,21 @@ export const jsonTypeAlias = factory.createTypeAliasDeclaration(
 )
 
 export const jsonValueTypeAlias = factory.createTypeAliasDeclaration(
-  [factory.createToken(SyntaxKind.ExportKeyword)],
+  [],
   jsonValueIdentifier,
   undefined,
   factory.createUnionTypeNode([
     factory.createTypeReferenceNode(jsonArrayIdentifier, undefined),
     factory.createTypeReferenceNode(jsonObjectIndentifier, undefined),
-    factory.createTypeReferenceNode(jsonPrimitiveIdentifier, undefined),
+    factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
+    factory.createLiteralTypeNode(factory.createNull()),
+    factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+    factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   ]),
 )
 
 export const jsonArrayTypeAlias = factory.createTypeAliasDeclaration(
-  [factory.createToken(SyntaxKind.ExportKeyword)],
+  [],
   jsonArrayIdentifier,
   undefined,
   factory.createArrayTypeNode(
@@ -73,7 +75,7 @@ export const jsonArrayTypeAlias = factory.createTypeAliasDeclaration(
 )
 
 export const jsonObjectTypeAlias = factory.createTypeAliasDeclaration(
-  [factory.createToken(SyntaxKind.ExportKeyword)],
+  [],
   jsonObjectIndentifier,
   undefined,
   factory.createMappedTypeNode(
@@ -94,18 +96,6 @@ export const jsonObjectTypeAlias = factory.createTypeAliasDeclaration(
   ),
 )
 
-export const jsonPrimitiveTypeAlias = factory.createTypeAliasDeclaration(
-  [factory.createToken(SyntaxKind.ExportKeyword)],
-  jsonPrimitiveIdentifier,
-  undefined,
-  factory.createUnionTypeNode([
-    factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
-    factory.createLiteralTypeNode(factory.createNull()),
-    factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-    factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  ]),
-)
-
 const columnIdentifier = factory.createIdentifier('c')
 const selectIdentifier = factory.createIdentifier('s')
 const insertIdentifier = factory.createIdentifier('i')
@@ -114,7 +104,7 @@ const updateIdentifier = factory.createIdentifier('u')
 export const unwrapColumnTypeIdentifier =
   factory.createIdentifier('UnwrapColumnType')
 export const unwrapColumnTypeTypeAlias = factory.createTypeAliasDeclaration(
-  [factory.createToken(SyntaxKind.ExportKeyword)],
+  [],
   unwrapColumnTypeIdentifier,
   [
     factory.createTypeParameterDeclaration(

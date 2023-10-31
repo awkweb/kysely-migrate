@@ -15,8 +15,8 @@
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
 
-    "allowJs": false,
-    "checkJs": false,
+    "allowJs": true,
+    "checkJs": true,
 
     "forceConsistentCasingInFileNames": true,
     "verbatimModuleSyntax": true,

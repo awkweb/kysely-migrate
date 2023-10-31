@@ -1,36 +1,32 @@
-import { relative } from 'path'
+import { dirname, relative } from 'path'
 import { capitalCase } from 'change-case'
 import { writeFile } from 'fs/promises'
 import pc from 'picocolors'
 
+import { existsSync } from 'node:fs'
+import { mkdir } from 'node:fs/promises'
+import { type Config } from '../config.js'
 import { S_BAR, S_SUCCESS, message, spinner } from '../utils/clack.js'
 import { getEnums } from '../utils/codegen/getEnums.js'
 import { getTypes } from '../utils/codegen/getTypes.js'
-import { findConfig } from '../utils/findConfig.js'
-import { loadConfig } from '../utils/loadConfig.js'
 
 export type CodegenOptions = {
-  config?: string | undefined
-  root?: string | undefined
+  silent?: boolean | undefined
 }
 
-export async function codegen(options: CodegenOptions) {
-  // Get cli config file
-  const configPath = await findConfig(options, true)
-
-  const config = await loadConfig({ configPath })
-
-  const db = config.db
-  if (!db) throw new Error('`db` config required to generate types.')
-
+export async function codegen(config: Config, options: CodegenOptions = {}) {
+  if (!config.db) throw new Error('`db` config required to generate types.')
   if (!config.codegen)
     throw new Error('`codegen` config required to generate types.')
 
-  const s = spinner(config._spinnerMs)
+  const typesDir = dirname(config.codegen.out)
+  if (!existsSync(typesDir)) await mkdir(typesDir)
+
+  const s = spinner(config._spinnerMs, options.silent)
   await s.start('Generating types')
 
-  const tables = await db.introspection.getTables()
-  const enums = await getEnums(db, config.codegen.dialect)
+  const tables = await config.db.introspection.getTables()
+  const enums = await getEnums(config.db, config.codegen.dialect)
 
   const content = getTypes(
     tables,
@@ -41,6 +37,8 @@ export async function codegen(options: CodegenOptions) {
   await writeFile(config.codegen.out, content)
 
   s.stop('Generated types')
+
+  if (options.silent) return
 
   if (tables.length) process.stdout.write(`${pc.gray(S_BAR)}\n`)
 

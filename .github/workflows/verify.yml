@@ -70,12 +70,40 @@ jobs:
 
   test:
     name: Test
+    env:
+      database_host: localhost
+      database_name: km
+      database_password: foobarbaz
+      database_username: dev
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0.34
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: km
+          MYSQL_PASSWORD: foobarbaz
+          MYSQL_USER: dev
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: km
+          POSTGRES_PASSWORD: foobarbaz
+          POSTGRES_USER: dev
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+        ports:  
+          - 5432:5432
     timeout-minutes: 5
-    # TODO: Add service containers and test against different dialects
-    # strategy:
-    #   matrix:
-    #     dialects: ['mysql', 'postgres', 'sqlite']
 
     steps:
       - name: Clone repository
@@ -83,6 +111,10 @@ jobs:
 
       - name: Install dependencies
         uses: ./.github/actions/install-dependencies
+
+      - name: Set up databases
+        run: |
+          mysql --host 127.0.0.1 --port 3306 -uroot -e 'SET GLOBAL log_bin_trust_function_creators = 1;'
 
       - name: Run tests
         run: pnpm test:cov

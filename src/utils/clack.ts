@@ -35,10 +35,12 @@ export function message(message = '', options: LogMessageOptions = {}) {
 
 // TODO: CI check should be handled by Clack
 // https://github.com/natemoo-re/clack/pull/169
-export function spinner(ms = 250) {
+export function spinner(ms = 250, silent = false) {
   const spin = clack_spinner()
   return {
     async start(msg: string) {
+      if (silent) return
+
       if (isCI) message(msg, { symbol: pc.green(s('◇', 'o')) })
       else {
         spin.start(msg)
@@ -47,6 +49,8 @@ export function spinner(ms = 250) {
       }
     },
     stop(msg: string, error: unknown = undefined) {
+      if (silent) return
+
       if (isCI) {
         if (error) message(msg, { symbol: pc.red(S_ERROR) })
         else message(msg, { symbol: pc.green(S_SUCCESS) })

@@ -6,21 +6,15 @@ import { snakeCase } from 'change-case'
 import { humanId } from 'human-id'
 import pc from 'picocolors'
 
-import { findConfig } from '../utils/findConfig.js'
+import { type Config } from '../config.js'
 import { getMigrator } from '../utils/getMigrator.js'
-import { loadConfig } from '../utils/loadConfig.js'
 
 export type CreateOptions = {
-  config?: string | undefined
   name?: string | undefined
-  root?: string | undefined
+  silent?: boolean | undefined
 }
 
-export async function create(options: CreateOptions) {
-  // Get cli config file
-  const configPath = await findConfig(options, true)
-
-  const config = await loadConfig({ configPath })
+export async function create(config: Config, options: CreateOptions = {}) {
   const migrator = getMigrator(config)
 
   const migrationsDir = config.migrationFolder

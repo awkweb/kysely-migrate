@@ -3,31 +3,12 @@ import {
   jsonArrayTypeAlias,
   jsonIdentifier,
   jsonObjectTypeAlias,
-  jsonPrimitiveTypeAlias,
   jsonTypeAlias,
   jsonValueTypeAlias,
   kyselyColumnTypeIdentifier,
   kyselyColumnTypeImportSpecifier,
 } from '../declarations.js'
 import { type Definitions } from '../types.js'
-
-const decimalIdentifier = factory.createIdentifier('Decimal')
-const decimalTypeAlias = factory.createTypeAliasDeclaration(
-  [factory.createToken(SyntaxKind.ExportKeyword)],
-  decimalIdentifier,
-  undefined,
-  factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-    factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-    factory.createUnionTypeNode([
-      factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-    ]),
-    factory.createUnionTypeNode([
-      factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-    ]),
-  ]),
-)
 
 export const mysqlDefinitions = {
   bigint: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
@@ -54,8 +35,18 @@ export const mysqlDefinitions = {
   ),
   decimal: {
     imports: { kysely: [kyselyColumnTypeImportSpecifier] },
-    declarations: [decimalTypeAlias],
-    value: factory.createTypeReferenceNode(decimalIdentifier, undefined),
+    declarations: [],
+    value: factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+      factory.createUnionTypeNode([
+        factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+      ]),
+      factory.createUnionTypeNode([
+        factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+      ]),
+    ]),
   },
   double: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   enum(column, table, enums) {
@@ -76,7 +67,6 @@ export const mysqlDefinitions = {
       jsonValueTypeAlias,
       jsonArrayTypeAlias,
       jsonObjectTypeAlias,
-      jsonPrimitiveTypeAlias,
     ],
     value: factory.createTypeReferenceNode(jsonIdentifier, undefined),
   },
@@ -91,7 +81,6 @@ export const mysqlDefinitions = {
   ),
   mediumint: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   mediumtext: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  set: factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
   smallint: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   text: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   time: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),

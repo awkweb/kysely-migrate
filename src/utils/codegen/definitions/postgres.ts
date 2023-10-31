@@ -4,7 +4,6 @@ import {
   jsonArrayTypeAlias,
   jsonIdentifier,
   jsonObjectTypeAlias,
-  jsonPrimitiveTypeAlias,
   jsonTypeAlias,
   jsonValueTypeAlias,
   kyselyColumnTypeIdentifier,
@@ -19,7 +18,6 @@ const json = {
     jsonValueTypeAlias,
     jsonArrayTypeAlias,
     jsonObjectTypeAlias,
-    jsonPrimitiveTypeAlias,
   ],
   value: factory.createTypeReferenceNode(jsonIdentifier, undefined),
 } satisfies DefinitionNode
@@ -58,7 +56,7 @@ export const postgresDefinitions = {
   cidr: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   date: timestamp,
   enum(column, table, enums) {
-    const values = enums.get(`${table.schema}.${column.name}`)
+    const values = enums.get(`${table.schema}.${column.dataType}`)
     if (!values) return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)
     return factory.createUnionTypeNode(
       values.map((value) =>
@@ -112,10 +110,11 @@ export const postgresDefinitions = {
   oid: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   path: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   polygon: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+  serial: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
   text: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   time: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   timestamp,
-  timestampz: timestamp,
+  timestamptz: timestamp,
   tsquery: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   tsvector: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   txid_snapshot: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),

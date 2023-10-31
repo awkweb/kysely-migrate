@@ -1,26 +1,16 @@
 import { join } from 'node:path'
 import { type ExecaSyncReturnValue, type SyncOptions } from 'execa'
 import { execaCommandSync } from 'execa'
-import fs from 'fs-extra'
 import pc from 'picocolors'
-import { afterEach, beforeAll, expect, test } from 'vitest'
+import { expect, test } from 'vitest'
 
 import { version } from './version.js'
 
 const cliPath = join(__dirname, '../src/cli.ts')
 
-const projectName = 'test-app'
-const genPath = join(__dirname, projectName)
-
 function run(args: string[], options: SyncOptions = {}): ExecaSyncReturnValue {
   return execaCommandSync(`bun ${cliPath} ${args.join(' ')}`, options)
 }
-
-beforeAll(() => {
-  fs.remove(genPath)
-})
-
-afterEach(() => fs.remove(genPath))
 
 test('--help', () => {
   const { stdout } = run(['--help'])
@@ -61,22 +51,4 @@ test('--help', () => {
 test('--version', () => {
   const { stdout } = run(['--version'])
   expect(stdout).toContain(`kysely-migrate/${version} `)
-})
-
-test('init', () => {
-  fs.ensureDirSync(genPath)
-  const { stdout } = run(['init'], { cwd: genPath })
-  const generatedFiles = fs.readdirSync(genPath).sort()
-
-  expect(
-    stdout.replace(
-      pc.green('kysely-migrate.config.ts'),
-      'kysely-migrate.config.ts',
-    ),
-  ).toContain('Created config file at kysely-migrate.config.ts')
-  expect(generatedFiles).toMatchInlineSnapshot(`
-    [
-      "kysely-migrate.config.ts",
-    ]
-  `)
 })

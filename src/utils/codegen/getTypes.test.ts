@@ -44,7 +44,7 @@ test('getColumnType > Generated', () => {
     new Map(),
     mysqlDefinitions,
     new Map(),
-    new Set(),
+    new Map(),
   )
   expect(printPropertySignature(res)).toMatchInlineSnapshot(`
     "type Table = {
@@ -70,7 +70,7 @@ test('getColumnType > Generated > UnwrapColumnType', () => {
     new Map(),
     postgresDefinitions,
     new Map(),
-    new Set(),
+    new Map(),
   )
   expect(printPropertySignature(res)).toMatchInlineSnapshot(`
     "type Table = {
@@ -96,7 +96,7 @@ test('getColumnType > nullable', () => {
     new Map(),
     mysqlDefinitions,
     new Map(),
-    new Set(),
+    new Map(),
   )
   expect(printPropertySignature(res)).toMatchInlineSnapshot(`
     "type Table = {
@@ -122,7 +122,7 @@ test('getColumnType > unknown definition', () => {
     new Map(),
     mysqlDefinitions,
     new Map(),
-    new Set(),
+    new Map(),
   )
   expect(printPropertySignature(res)).toMatchInlineSnapshot(`
     "type Table = {

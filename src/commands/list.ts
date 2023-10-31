@@ -1,20 +1,10 @@
 import pc from 'picocolors'
 
+import type { Config } from '../config.js'
 import { S_BAR, S_INFO, S_SUCCESS, message } from '../utils/clack.js'
-import { findConfig } from '../utils/findConfig.js'
 import { getMigrator } from '../utils/getMigrator.js'
-import { loadConfig } from '../utils/loadConfig.js'
 
-export type ListOptions = {
-  config?: string | undefined
-  root?: string | undefined
-}
-
-export async function list(options: ListOptions) {
-  // Get cli config file
-  const configPath = await findConfig(options, true)
-
-  const config = await loadConfig({ configPath })
+export async function list(config: Config) {
   const migrator = getMigrator(config)
 
   const migrations = await migrator.getMigrations()

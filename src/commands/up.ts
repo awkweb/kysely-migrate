@@ -2,24 +2,18 @@ import { existsSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { type MigrationResultSet } from 'kysely'
 
+import { type Config } from '../config.js'
 import { spinner } from '../utils/clack.js'
-import { findConfig } from '../utils/findConfig.js'
 import { getAppliedMigrationsCount } from '../utils/getAppliedMigrationsCount.js'
 import { getMigrator } from '../utils/getMigrator.js'
-import { loadConfig } from '../utils/loadConfig.js'
 import { logResultSet } from '../utils/logResultSet.js'
 
 export type UpOptions = {
-  config?: string | undefined
   latest?: boolean | undefined
-  root?: string | undefined
+  silent?: boolean | undefined
 }
 
-export async function up(options: UpOptions) {
-  // Get cli config file
-  const configPath = await findConfig(options, true)
-
-  const config = await loadConfig({ configPath })
+export async function up(config: Config, options: UpOptions = {}) {
   const migrator = getMigrator(config)
 
   const migrationsDir = config.migrationFolder
@@ -30,7 +24,7 @@ export async function up(options: UpOptions) {
 
   if (pendingMigrations.length === 0) return 'No pending migrations.'
 
-  const s = spinner(config._spinnerMs)
+  const s = spinner(config._spinnerMs, options.silent)
   await s.start('Running migrations')
 
   let resultSet: MigrationResultSet
@@ -39,6 +33,8 @@ export async function up(options: UpOptions) {
 
   const { error, results = [] } = resultSet
   s.stop('Ran migrations', error ? 1 : 0)
+
+  if (options.silent) return
 
   logResultSet(resultSet)
 

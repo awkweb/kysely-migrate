@@ -11,6 +11,7 @@ export async function getEnums(db: Kysely<any>, dialect: Dialect | undefined) {
       .selectFrom('information_schema.COLUMNS')
       .select(['COLUMN_NAME', 'COLUMN_TYPE', 'TABLE_NAME', 'TABLE_SCHEMA'])
       .execute()
+      .catch(() => [])
 
     for (const result of results) {
       const key = `${result.TABLE_SCHEMA}.${result.TABLE_NAME}.${result.COLUMN_NAME}`
@@ -32,6 +33,7 @@ export async function getEnums(db: Kysely<any>, dialect: Dialect | undefined) {
       )
       .select(['namespace.nspname', 'type.typname', 'enum.enumlabel'])
       .execute()
+      .catch(() => [])
 
     for (const result of results) {
       const key = `${result.nspname}.${result.typname}`

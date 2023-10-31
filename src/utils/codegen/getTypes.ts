@@ -9,6 +9,7 @@ import {
   SyntaxKind,
   type TypeAliasDeclaration,
   type TypeNode,
+  type TypeReferenceNode,
   createPrinter,
   createSourceFile,
   factory,
@@ -61,7 +62,7 @@ export function getTypes(
 
   const nodes = []
   const importsMap: Map<string, Set<ImportSpecifier>> = new Map()
-  const typeDeclarations: Set<TypeAliasDeclaration> = new Set()
+  const typeDeclarationsMap: Map<string, TypeAliasDeclaration> = new Map()
 
   // Create types
   const dbTypeParameters = []
@@ -75,7 +76,7 @@ export function getTypes(
         enums,
         definitions,
         importsMap,
-        typeDeclarations,
+        typeDeclarationsMap,
       )
       columnProperties.push(columnProperty)
     }
@@ -138,7 +139,7 @@ export function getTypes(
   }
 
   // Add in type declarations
-  nodes.unshift(...typeDeclarations)
+  nodes.unshift(...typeDeclarationsMap.values())
 
   // Add imports statement to start of nodes
   for (const [name, imports] of importsMap.entries()) {
@@ -186,14 +187,16 @@ export function getColumnType(
   enums: Map<string, string[]>,
   definitions: Definitions,
   importsMap: Map<string, Set<ImportSpecifier>>,
-  typeDeclarations: Set<TypeAliasDeclaration>,
+  typeDeclarationsMap: Map<string, TypeAliasDeclaration>,
 ) {
+  let dataType: keyof typeof definitions = column.dataType
+  // postgres enums have `dataType` set to enum object
+  if (enums.has(`${table.schema}.${column.dataType}`)) dataType = 'enum'
+
   // Get type from lookup
   let type: TypeNode
-  if (column.dataType in definitions) {
-    const definition = definitions[
-      column.dataType as keyof typeof definitions
-    ] as Definitions[string]
+  if (dataType in definitions) {
+    const definition = definitions[dataType] as Definitions[string]
     if ('value' in definition) {
       type = definition.value
       for (const [name, imports] of Object.entries(definition.imports)) {
@@ -203,7 +206,7 @@ export function getColumnType(
         } else importsMap.set(name, new Set(imports))
       }
       for (const declaration of definition.declarations) {
-        typeDeclarations.add(declaration)
+        typeDeclarationsMap.set(declaration.name.escapedText!, declaration)
       }
     } else if (typeof definition === 'function') {
       type = definition(column, table, enums)
@@ -226,14 +229,22 @@ export function getColumnType(
       importsMap.set('kysely', new Set([kyselyGeneratedImportSpecifier]))
     }
 
-    // Unwrap declarations already contained in `ColumnType`
-    if (
-      isTypeReferenceNode(type) &&
-      (type.typeName as Identifier).escapedText ===
+    const node =
+      typeDeclarationsMap.get(
+        ((type as TypeReferenceNode).typeName as Identifier)
+          ?.escapedText as string,
+      )?.type ?? type
+    const hasColumnType =
+      isTypeReferenceNode(node) &&
+      (node.typeName as Identifier).escapedText ===
         kyselyColumnTypeIdentifier.escapedText
-    ) {
-      if (!typeDeclarations.has(unwrapColumnTypeTypeAlias))
-        typeDeclarations.add(unwrapColumnTypeTypeAlias)
+    // Unwrap declarations already contained in `ColumnType`
+    if (hasColumnType) {
+      if (!typeDeclarationsMap.has(unwrapColumnTypeIdentifier.escapedText!))
+        typeDeclarationsMap.set(
+          unwrapColumnTypeIdentifier.escapedText!,
+          unwrapColumnTypeTypeAlias,
+        )
       columnTypeNode = factory.createTypeReferenceNode(
         kyselyGeneratedIdentifier,
         [factory.createTypeReferenceNode(unwrapColumnTypeIdentifier, [type])],

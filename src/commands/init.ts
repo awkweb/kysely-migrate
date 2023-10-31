@@ -3,15 +3,16 @@ import { cancel, confirm, isCancel } from '@clack/prompts'
 import { writeFile } from 'fs/promises'
 import pc from 'picocolors'
 
-import { defaultConfig } from '../config.js'
+import { type Config, defaultConfig } from '../config.js'
 import { findConfig } from '../utils/findConfig.js'
 
 export type InitOptions = {
   config?: string | undefined
   root?: string | undefined
+  silent?: boolean | undefined
 }
 
-export async function init(options: InitOptions) {
+export async function init(_config: Config, options: InitOptions) {
   const rootDir = resolve(options.root || process.cwd())
   const outPath = resolve(rootDir, 'kysely-migrate.config.ts')
 
@@ -24,6 +25,8 @@ export default defineConfig(${JSON.stringify(defaultConfig)})
   const configPath = await findConfig(options)
   let shouldContinue: boolean | symbol = true
   if (configPath && basename(configPath) === basename(outPath)) {
+    if (options.silent) throw new Error('Config already exists.')
+
     shouldContinue = await confirm({
       message: `Overwrite config file at ${pc.gray(
         relative(process.cwd(), configPath),

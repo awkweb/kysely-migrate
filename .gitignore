@@ -5,6 +5,7 @@ dist
 node_modules
 *.vitest-temp.json
 *.tsbuildinfo
+test/__app
 
 # local env files
 .env
