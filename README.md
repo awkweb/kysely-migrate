@@ -150,7 +150,3 @@ If you aren't using Bun, you either need to use the `.js` extension for your mig
 ## Contributing
 
 Contributions to kysely-migrate are greatly appreciated! If you're interested in contributing, please create a [new GitHub Discussion](https://github.com/tmm/kysely-migrate/discussions/new?category=ideas) with some info on what you would like to work on **before submitting a pull request**.
-
-## Sponsors
-
-If you find kysely-migrate useful or use it for work, please consider supporting development on [GitHub Sponsors](https://github.com/sponsors/tmm). Thank you 🙏
