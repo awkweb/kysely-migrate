@@ -142,7 +142,7 @@ If you aren't using Bun, you either need to use the `.js` extension for your mig
 ```json
 {
   "scripts": {
-    "migrate": "tsx node_modules/kysely-migrate/cli.js"
+    "migrate": "tsx node_modules/kysely-migrate/dist/esm/cli.js"
   }
 }
 ```

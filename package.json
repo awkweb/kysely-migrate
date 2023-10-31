@@ -8,7 +8,7 @@
     "url": "https://github.com/tmm/kysely-migrate.git"
   },
   "scripts": {
-    "build": "pnpm clean && pnpm build:esm && pnpm build:types && printf 'import \"./dist/esm/cli.js\"' > ./cli.js",
+    "build": "pnpm clean && pnpm build:esm && pnpm build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "changeset:publish": "pnpm version:update && pnpm build && changeset publish",
@@ -92,28 +92,15 @@
     "typescript": "5.2.2",
     "vitest": "^0.34.5"
   },
-  "contributors": [
-    "tmm@awkweb.com"
-  ],
+  "contributors": ["tmm@awkweb.com"],
   "funding": "https://github.com/sponsors/tmm",
-  "keywords": [
-    "kysely",
-    "cli",
-    "migrate",
-    "migrations",
-    "codegen"
-  ],
+  "keywords": ["kysely", "cli", "migrate", "migrations", "codegen"],
   "packageManager": "pnpm@8.8.0",
   "simple-git-hooks": {
     "pre-commit": "pnpm format && pnpm lint:fix"
   },
   "knip": {
-    "entry": [
-      "src/**/*.ts!",
-      "src/exports/index.ts!"
-    ],
-    "project": [
-      ".scripts/**/*.ts"
-    ]
+    "entry": ["src/**/*.ts!", "src/exports/index.ts!"],
+    "project": [".scripts/**/*.ts"]
   }
 }
