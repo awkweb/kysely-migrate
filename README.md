@@ -5,21 +5,12 @@
 ## Installation
 
 ```fish
-npm i --save-dev kysely-migrate
-```
-```fish
-pnpm add -D kysely-migrate
-```
-```fish
-yarn add -D kysely-migrate
-```
-```fish
 bun add -D kysely-migrate
 ```
 
 ## Usage
 
-Create a `kysely-migrate.config.ts` file and fill it out:
+Create a `kysely-migrate.config.ts` file and fill it out.
 
 ```ts
 // kysely-migrate.config.ts
@@ -36,10 +27,20 @@ export default defineConfig({
 })
 ```
 
+Add a `"migrate"` script to your `package.json` file.
+
+```json
+{
+  "scripts": {
+    "migrate": "bun -b kysely-migrate"
+  }
+}
+```
+
 Run [commands](#commands) to manage migrations and generate types.
 
 ```fish
-kysely-migrate <command> [options]
+bun migrate <command> [options]
 ```
 
 ## Commands
@@ -210,6 +211,20 @@ import {
   postgresDefinitions,
   sqliteDefinitions,
 } from 'kysely-migrate'
+```
+
+## Frequently Asked Questions
+
+### Unknown file extension ".ts"
+
+If you aren't using Bun, you either need to use the `.js` extension for your migration files or process the TypeScript files yourself. Example using [`tsx`](https://github.com/esbuild-kit/tsx).
+
+```json
+{
+  "scripts": {
+    "migrate": "tsx node_modules/kysely-migrate/cli.js"
+  }
+}
 ```
 
 ## Contributing
