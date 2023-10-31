@@ -1,5 +1,11 @@
 # kysely-migrate
 
+## 0.0.12
+
+### Patch Changes
+
+- [`059e1b2`](https://github.com/tmm/kysely-migrate/commit/059e1b27377a5e4f267ba95653586d2a588c9f88) Thanks [@tmm](https://github.com/tmm)! - Added enum support
+
 ## 0.0.11
 
 ### Patch Changes
