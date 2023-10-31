@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question
+    url: https://github.com/tmm/kysely-migrate/discussions/new?category=q-a
+    about: Ask a question and discuss with other community members.
+  - name: Feature Request
+    url: https://github.com/tmm/kysely-migrate/discussions/new?category=ideas
+    about: Request features or brainstorm ideas for new functionality.
