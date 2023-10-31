@@ -13,7 +13,6 @@ bun add -D kysely-migrate
 Create a `kysely-migrate.config.ts` file and fill it out.
 
 ```ts
-// kysely-migrate.config.ts
 import { Kysely, MysqlDialect } from 'kysely'
 import { defineConfig } from 'kysely-migrate'
 import { createPool } from 'mysql2'
@@ -45,96 +44,17 @@ bun migrate <command> [options]
 
 ## Commands
 
-Run `kysely-migrate --help` or `kysely-migrate <command> --help` to see the list of available commands, options, and examples. The following global options exist:
+Run `kysely-migrate --help` or `kysely-migrate <command> --help` to see the list of available commands, options, and examples.
 
-| Option               | Type     | Description                     |
-| -------------------- | -------- | ------------------------------- |
-| `-c, --config <path>` | `string` | Path to config file               |
-| `-r, --root <path>`  | `string` | Root path to resolve config from |
-
-### codegen
-
-Generate types from database metadata
-
-```fish
-kysely-migrate codegen
 ```
-
-| Option         | Type      | Description    |
-| -------------- | --------- | -------------- |
-| `-s, --silent` | `boolean` | Disable output |
-
-### create
-
-Create new migration
-
-```fish
-kysely-migrate create
+codegen  generate types from database metadata
+create   create new migration
+down     migrate one step down
+init     create configuration file
+list     list migrations
+to       migrate to selected migration
+up       migrate one step up
 ```
-
-| Option         | Type      | Description    |
-| -------------- | --------- | -------------- |
-| `-n, --name`   | `string`  | Migration name |
-| `-s, --silent` | `boolean` | Disable output |
-
-### down
-
-Migrate one step down
-
-```fish
-kysely-migrate down
-```
-
-| Option         | Type      | Description          |
-| -------------- | --------- | -------------------- |
-| `-R, --reset`  | `boolean` | Reset all migrations |
-| `-s, --silent` | `boolean` | Disable output       |
-
-### init
-
-Create configuration file
-
-```fish
-kysely-migrate init
-```
-
-| Option         | Type      | Description    |
-| -------------- | --------- | -------------- |
-| `-s, --silent` | `boolean` | Disable output |
-
-### list
-
-List migrations
-
-```fish
-kysely-migrate list
-```
-
-### to
-
-Migrate to selected migration
-
-```fish
-kysely-migrate to
-```
-
-| Option         | Type      | Description    |
-| -------------- | --------- | -------------- |
-| `-n, --name`   | `string`  | Migration name |
-| `-s, --silent` | `boolean` | Disable output |
-
-### up
-
-Migrate one step up
-
-```fish
-kysely-migrate up
-```
-
-| Option         | Type      | Description                  |
-| -------------- | --------- | ---------------------------- |
-| `-l, --latest` | `boolean` | Apply all pending migrations |
-| `-s, --silent` | `boolean` | Disable output               |
 
 ## API
 
