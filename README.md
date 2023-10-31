@@ -217,7 +217,7 @@ import {
 
 ### Unknown file extension ".ts"
 
-If you aren't using Bun, you either need to use the `.js` extension for your migration files or process the TypeScript files yourself. Example using [`tsx`](https://github.com/esbuild-kit/tsx).
+If you aren't using Bun, you either need to use the `.js` extension for your migration files or process the TypeScript files yourself. For example, you can use [`tsx`](https://github.com/esbuild-kit/tsx).
 
 ```json
 {

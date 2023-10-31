@@ -6,6 +6,7 @@ node_modules
 *.vitest-temp.json
 *.tsbuildinfo
 test/__app
+cli.js
 
 # local env files
 .env

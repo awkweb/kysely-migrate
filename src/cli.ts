@@ -108,14 +108,14 @@ type CliOptions = {
 // Parse CLI args without running command
 cli.parse(process.argv, { run: false })
 
-if (cli.options.silent) {
+if (cli.options.silent)
   try {
     await cli.runMatchedCommand()
     process.exit(0)
   } catch {
     process.exit(1)
   }
-} else {
+else
   try {
     // If not matched command, either show help or error out
     if (!cli.matchedCommand) {
@@ -125,7 +125,9 @@ if (cli.options.silent) {
         intro(pc.inverse(' kysely-migrate '))
         throw new Error(`Unknown command: ${cli.args.join(' ')}`)
       }
-    } else intro(pc.inverse(' kysely-migrate '))
+    } else {
+      intro(pc.inverse(' kysely-migrate '))
+    }
 
     const result = await cli.runMatchedCommand()
     if (result) outro(result)
@@ -134,4 +136,3 @@ if (cli.options.silent) {
     outro(pc.red((error as Error).message))
     process.exit(1)
   }
-}
