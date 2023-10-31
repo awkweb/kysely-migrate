@@ -4,16 +4,16 @@
 
 ## Installation
 
-```bash
+```fish
 npm i --save-dev kysely-migrate
 ```
-```bash
+```fish
 pnpm add -D kysely-migrate
 ```
-```bash
+```fish
 yarn add -D kysely-migrate
 ```
-```bash
+```fish
 bun add -D kysely-migrate
 ```
 
@@ -38,7 +38,7 @@ export default defineConfig({
 
 Run [commands](#commands) to manage migrations and generate types.
 
-```bash
+```fish
 kysely-migrate <command> [options]
 ```
 
@@ -55,7 +55,7 @@ Run `kysely-migrate --help` or `kysely-migrate <command> --help` to see the list
 
 Generate types from database metadata
 
-```bash
+```fish
 kysely-migrate codegen
 ```
 
@@ -67,7 +67,7 @@ kysely-migrate codegen
 
 Create new migration
 
-```bash
+```fish
 kysely-migrate create
 ```
 
@@ -80,7 +80,7 @@ kysely-migrate create
 
 Migrate one step down
 
-```bash
+```fish
 kysely-migrate down
 ```
 
@@ -93,7 +93,7 @@ kysely-migrate down
 
 Create configuration file
 
-```bash
+```fish
 kysely-migrate init
 ```
 
@@ -105,7 +105,7 @@ kysely-migrate init
 
 List migrations
 
-```bash
+```fish
 kysely-migrate list
 ```
 
@@ -113,7 +113,7 @@ kysely-migrate list
 
 Migrate to selected migration
 
-```bash
+```fish
 kysely-migrate to
 ```
 
@@ -126,7 +126,7 @@ kysely-migrate to
 
 Migrate one step up
 
-```bash
+```fish
 kysely-migrate up
 ```
 
