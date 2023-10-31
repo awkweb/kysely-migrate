@@ -1,5 +1,11 @@
 # kysely-migrate
 
+## 0.0.14
+
+### Patch Changes
+
+- [`05c30b0`](https://github.com/tmm/kysely-migrate/commit/05c30b0cef8a417dd9dc2df27996c29f7e82ee75) Thanks [@tmm](https://github.com/tmm)! - Fixed ESM import issue
+
 ## 0.0.13
 
 ### Patch Changes
