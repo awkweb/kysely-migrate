@@ -73,9 +73,9 @@ test('mysql', async () => {
         field_year: number;
     };
 
-    export type FooSelectable = Selectable<Foo>;
-
     export type FooInsertable = Insertable<Foo>;
+
+    export type FooSelectable = Selectable<Foo>;
 
     export type FooUpdateable = Updateable<Foo>;
 
@@ -164,9 +164,9 @@ test('postgres', async () => {
         field_xml: string;
     };
 
-    export type FooSelectable = Selectable<Foo>;
-
     export type FooInsertable = Insertable<Foo>;
+
+    export type FooSelectable = Selectable<Foo>;
 
     export type FooUpdateable = Updateable<Foo>;
 

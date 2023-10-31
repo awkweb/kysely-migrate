@@ -1,29 +1,22 @@
-import {
-  EmitHint,
-  type PropertySignature,
-  ScriptTarget,
-  createPrinter,
-  createSourceFile,
-  factory,
-} from 'typescript'
+import ts from 'typescript'
 import { expect, test } from 'vitest'
 
 import { mysqlDefinitions } from './definitions/mysql.js'
 import { postgresDefinitions } from './definitions/postgres.js'
 import { getColumnType, getTypes } from './getTypes.js'
 
-function printPropertySignature(propertySignature: PropertySignature) {
-  const node = factory.createTypeAliasDeclaration(
+function printPropertySignature(propertySignature: ts.PropertySignature) {
+  const node = ts.factory.createTypeAliasDeclaration(
     undefined,
-    factory.createIdentifier('Table'),
+    ts.factory.createIdentifier('Table'),
     undefined,
-    factory.createTypeLiteralNode([propertySignature]),
+    ts.factory.createTypeLiteralNode([propertySignature]),
   )
-  const printer = createPrinter()
+  const printer = ts.createPrinter()
   return printer.printNode(
-    EmitHint.Unspecified,
+    ts.EmitHint.Unspecified,
     node,
-    createSourceFile('', '', ScriptTarget.Latest),
+    ts.createSourceFile('', '', ts.ScriptTarget.Latest),
   )
 }
 

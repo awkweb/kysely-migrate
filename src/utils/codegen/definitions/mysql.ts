@@ -1,4 +1,5 @@
-import { SyntaxKind, factory } from 'typescript'
+import ts from 'typescript'
+
 import {
   jsonArrayTypeAlias,
   jsonIdentifier,
@@ -11,55 +12,56 @@ import {
 import { type Definitions } from '../types.js'
 
 export const mysqlDefinitions = {
-  bigint: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  binary: factory.createTypeReferenceNode(
-    factory.createIdentifier('Buffer'),
+  bigint: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  binary: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Buffer'),
     undefined,
   ),
-  bit: factory.createTypeReferenceNode(
-    factory.createIdentifier('Buffer'),
+  bit: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Buffer'),
     undefined,
   ),
-  blob: factory.createTypeReferenceNode(
-    factory.createIdentifier('Buffer'),
+  blob: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Buffer'),
     undefined,
   ),
-  char: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  date: factory.createTypeReferenceNode(
-    factory.createIdentifier('Date'),
+  char: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  date: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Date'),
     undefined,
   ),
-  datetime: factory.createTypeReferenceNode(
-    factory.createIdentifier('Date'),
+  datetime: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Date'),
     undefined,
   ),
   decimal: {
     imports: { kysely: [kyselyColumnTypeImportSpecifier] },
     declarations: [],
-    value: factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-      factory.createUnionTypeNode([
-        factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+    value: ts.factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+      ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+      ts.factory.createUnionTypeNode([
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
       ]),
-      factory.createUnionTypeNode([
-        factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+      ts.factory.createUnionTypeNode([
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
       ]),
     ]),
   },
-  double: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+  double: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
   enum(column, table, enums) {
     const values = enums.get(`${table.schema}.${table.name}.${column.name}`)
-    if (!values) return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)
-    return factory.createUnionTypeNode(
+    if (!values)
+      return ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword)
+    return ts.factory.createUnionTypeNode(
       values.map((value) =>
-        factory.createLiteralTypeNode(factory.createStringLiteral(value)),
+        ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(value)),
       ),
     )
   },
-  float: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  int: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+  float: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  int: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
   json: {
     imports: { kysely: [kyselyColumnTypeImportSpecifier] },
     declarations: [
@@ -68,36 +70,36 @@ export const mysqlDefinitions = {
       jsonArrayTypeAlias,
       jsonObjectTypeAlias,
     ],
-    value: factory.createTypeReferenceNode(jsonIdentifier, undefined),
+    value: ts.factory.createTypeReferenceNode(jsonIdentifier, undefined),
   },
-  longblob: factory.createTypeReferenceNode(
-    factory.createIdentifier('Buffer'),
+  longblob: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Buffer'),
     undefined,
   ),
-  longtext: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  mediumblob: factory.createTypeReferenceNode(
-    factory.createIdentifier('Buffer'),
+  longtext: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  mediumblob: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Buffer'),
     undefined,
   ),
-  mediumint: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  mediumtext: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  smallint: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  text: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  time: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  timestamp: factory.createTypeReferenceNode(
-    factory.createIdentifier('Date'),
+  mediumint: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  mediumtext: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  smallint: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  text: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  time: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  timestamp: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Date'),
     undefined,
   ),
-  tinyblob: factory.createTypeReferenceNode(
-    factory.createIdentifier('Buffer'),
+  tinyblob: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Buffer'),
     undefined,
   ),
-  tinyint: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  tinytext: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  varbinary: factory.createTypeReferenceNode(
-    factory.createIdentifier('Buffer'),
+  tinyint: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  tinytext: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  varbinary: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Buffer'),
     undefined,
   ),
-  varchar: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  year: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+  varchar: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  year: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
 } satisfies Definitions

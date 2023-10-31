@@ -1,140 +1,145 @@
-import { SyntaxKind, factory } from 'typescript'
+import ts from 'typescript'
 
-export const kyselyColumnTypeIdentifier = factory.createIdentifier('ColumnType')
-export const kyselyColumnTypeImportSpecifier = factory.createImportSpecifier(
+export const kyselyColumnTypeIdentifier =
+  ts.factory.createIdentifier('ColumnType')
+export const kyselyColumnTypeImportSpecifier = ts.factory.createImportSpecifier(
   true,
   undefined,
   kyselyColumnTypeIdentifier,
 )
 
-export const kyselyGeneratedIdentifier = factory.createIdentifier('Generated')
-export const kyselyGeneratedImportSpecifier = factory.createImportSpecifier(
+export const kyselyGeneratedIdentifier =
+  ts.factory.createIdentifier('Generated')
+export const kyselyGeneratedImportSpecifier = ts.factory.createImportSpecifier(
   true,
   undefined,
   kyselyGeneratedIdentifier,
 )
 
-export const kyselyInsertableIdentifier = factory.createIdentifier('Insertable')
-export const kyselyInsertableImportSpecifier = factory.createImportSpecifier(
+export const kyselyInsertableIdentifier =
+  ts.factory.createIdentifier('Insertable')
+export const kyselyInsertableImportSpecifier = ts.factory.createImportSpecifier(
   true,
   undefined,
   kyselyInsertableIdentifier,
 )
 
-export const kyselySelectableIdentifier = factory.createIdentifier('Selectable')
-export const kyselySelectableImportSpecifier = factory.createImportSpecifier(
+export const kyselySelectableIdentifier =
+  ts.factory.createIdentifier('Selectable')
+export const kyselySelectableImportSpecifier = ts.factory.createImportSpecifier(
   true,
   undefined,
   kyselySelectableIdentifier,
 )
 
-export const kyselyUpdateableIdentifier = factory.createIdentifier('Updateable')
-export const kyselyUpdateableImportSpecifier = factory.createImportSpecifier(
+export const kyselyUpdateableIdentifier =
+  ts.factory.createIdentifier('Updateable')
+export const kyselyUpdateableImportSpecifier = ts.factory.createImportSpecifier(
   true,
   undefined,
   kyselyUpdateableIdentifier,
 )
 
-export const jsonIdentifier = factory.createIdentifier('Json')
-export const jsonValueIdentifier = factory.createIdentifier('JsonValue')
-export const jsonArrayIdentifier = factory.createIdentifier('JsonArray')
-export const jsonObjectIndentifier = factory.createIdentifier('JsonObject')
+export const jsonIdentifier = ts.factory.createIdentifier('Json')
+export const jsonValueIdentifier = ts.factory.createIdentifier('JsonValue')
+export const jsonArrayIdentifier = ts.factory.createIdentifier('JsonArray')
+export const jsonObjectIndentifier = ts.factory.createIdentifier('JsonObject')
 
-export const jsonTypeAlias = factory.createTypeAliasDeclaration(
+export const jsonTypeAlias = ts.factory.createTypeAliasDeclaration(
   [],
   jsonIdentifier,
   undefined,
-  factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-    factory.createTypeReferenceNode(jsonValueIdentifier, undefined),
-    factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-    factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+  ts.factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+    ts.factory.createTypeReferenceNode(jsonValueIdentifier, undefined),
+    ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+    ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
   ]),
 )
 
-export const jsonValueTypeAlias = factory.createTypeAliasDeclaration(
+export const jsonValueTypeAlias = ts.factory.createTypeAliasDeclaration(
   [],
   jsonValueIdentifier,
   undefined,
-  factory.createUnionTypeNode([
-    factory.createTypeReferenceNode(jsonArrayIdentifier, undefined),
-    factory.createTypeReferenceNode(jsonObjectIndentifier, undefined),
-    factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
-    factory.createLiteralTypeNode(factory.createNull()),
-    factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-    factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+  ts.factory.createUnionTypeNode([
+    ts.factory.createTypeReferenceNode(jsonArrayIdentifier, undefined),
+    ts.factory.createTypeReferenceNode(jsonObjectIndentifier, undefined),
+    ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
+    ts.factory.createLiteralTypeNode(ts.factory.createNull()),
+    ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+    ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
   ]),
 )
 
-export const jsonArrayTypeAlias = factory.createTypeAliasDeclaration(
+export const jsonArrayTypeAlias = ts.factory.createTypeAliasDeclaration(
   [],
   jsonArrayIdentifier,
   undefined,
-  factory.createArrayTypeNode(
-    factory.createTypeReferenceNode(jsonValueIdentifier, undefined),
+  ts.factory.createArrayTypeNode(
+    ts.factory.createTypeReferenceNode(jsonValueIdentifier, undefined),
   ),
 )
 
-export const jsonObjectTypeAlias = factory.createTypeAliasDeclaration(
+export const jsonObjectTypeAlias = ts.factory.createTypeAliasDeclaration(
   [],
   jsonObjectIndentifier,
   undefined,
-  factory.createMappedTypeNode(
+  ts.factory.createMappedTypeNode(
     undefined,
-    factory.createTypeParameterDeclaration(
+    ts.factory.createTypeParameterDeclaration(
       undefined,
-      factory.createIdentifier('key'),
-      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+      ts.factory.createIdentifier('key'),
+      ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
       undefined,
     ),
     undefined,
-    factory.createToken(SyntaxKind.QuestionToken),
-    factory.createUnionTypeNode([
-      factory.createTypeReferenceNode(jsonValueIdentifier, undefined),
-      factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
+    ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+    ts.factory.createUnionTypeNode([
+      ts.factory.createTypeReferenceNode(jsonValueIdentifier, undefined),
+      ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
     ]),
     undefined,
   ),
 )
 
-const columnIdentifier = factory.createIdentifier('c')
-const selectIdentifier = factory.createIdentifier('s')
-const insertIdentifier = factory.createIdentifier('i')
-const updateIdentifier = factory.createIdentifier('u')
+const columnIdentifier = ts.factory.createIdentifier('c')
+const selectIdentifier = ts.factory.createIdentifier('s')
+const insertIdentifier = ts.factory.createIdentifier('i')
+const updateIdentifier = ts.factory.createIdentifier('u')
 
 export const unwrapColumnTypeIdentifier =
-  factory.createIdentifier('UnwrapColumnType')
-export const unwrapColumnTypeTypeAlias = factory.createTypeAliasDeclaration(
+  ts.factory.createIdentifier('UnwrapColumnType')
+export const unwrapColumnTypeTypeAlias = ts.factory.createTypeAliasDeclaration(
   [],
   unwrapColumnTypeIdentifier,
   [
-    factory.createTypeParameterDeclaration(
+    ts.factory.createTypeParameterDeclaration(
       undefined,
       columnIdentifier,
       undefined,
       undefined,
     ),
   ],
-  factory.createConditionalTypeNode(
-    factory.createTypeReferenceNode(columnIdentifier, undefined),
-    factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createInferTypeNode(
-        factory.createTypeParameterDeclaration(
+  ts.factory.createConditionalTypeNode(
+    ts.factory.createTypeReferenceNode(columnIdentifier, undefined),
+    ts.factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+      ts.factory.createInferTypeNode(
+        ts.factory.createTypeParameterDeclaration(
           undefined,
           selectIdentifier,
           undefined,
           undefined,
         ),
       ),
-      factory.createInferTypeNode(
-        factory.createTypeParameterDeclaration(
+      ts.factory.createInferTypeNode(
+        ts.factory.createTypeParameterDeclaration(
           undefined,
           insertIdentifier,
           undefined,
           undefined,
         ),
       ),
-      factory.createInferTypeNode(
-        factory.createTypeParameterDeclaration(
+      ts.factory.createInferTypeNode(
+        ts.factory.createTypeParameterDeclaration(
           undefined,
           updateIdentifier,
           undefined,
@@ -142,21 +147,21 @@ export const unwrapColumnTypeTypeAlias = factory.createTypeAliasDeclaration(
         ),
       ),
     ]),
-    factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createTypeReferenceNode(selectIdentifier, undefined),
-      factory.createUnionTypeNode([
-        factory.createTypeReferenceNode(insertIdentifier, undefined),
-        factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
+    ts.factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+      ts.factory.createTypeReferenceNode(selectIdentifier, undefined),
+      ts.factory.createUnionTypeNode([
+        ts.factory.createTypeReferenceNode(insertIdentifier, undefined),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
       ]),
-      factory.createTypeReferenceNode(updateIdentifier, undefined),
+      ts.factory.createTypeReferenceNode(updateIdentifier, undefined),
     ]),
-    factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createTypeReferenceNode(columnIdentifier, undefined),
-      factory.createUnionTypeNode([
-        factory.createTypeReferenceNode(columnIdentifier, undefined),
-        factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
+    ts.factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+      ts.factory.createTypeReferenceNode(columnIdentifier, undefined),
+      ts.factory.createUnionTypeNode([
+        ts.factory.createTypeReferenceNode(columnIdentifier, undefined),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
       ]),
-      factory.createTypeReferenceNode(columnIdentifier, undefined),
+      ts.factory.createTypeReferenceNode(columnIdentifier, undefined),
     ]),
   ),
 )

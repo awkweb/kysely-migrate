@@ -1,4 +1,4 @@
-import { SyntaxKind, factory } from 'typescript'
+import ts from 'typescript'
 
 import {
   jsonArrayTypeAlias,
@@ -19,107 +19,108 @@ const json = {
     jsonArrayTypeAlias,
     jsonObjectTypeAlias,
   ],
-  value: factory.createTypeReferenceNode(jsonIdentifier, undefined),
+  value: ts.factory.createTypeReferenceNode(jsonIdentifier, undefined),
 } satisfies DefinitionNode
 
 const timestamp = {
   imports: { kysely: [kyselyColumnTypeImportSpecifier] },
   declarations: [],
-  value: factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-    factory.createTypeReferenceNode(
-      factory.createIdentifier('Date'),
+  value: ts.factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+    ts.factory.createTypeReferenceNode(
+      ts.factory.createIdentifier('Date'),
       undefined,
     ),
-    factory.createUnionTypeNode([
-      factory.createTypeReferenceNode(
-        factory.createIdentifier('Date'),
+    ts.factory.createUnionTypeNode([
+      ts.factory.createTypeReferenceNode(
+        ts.factory.createIdentifier('Date'),
         undefined,
       ),
-      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+      ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
     ]),
-    factory.createUnionTypeNode([
-      factory.createTypeReferenceNode(
-        factory.createIdentifier('Date'),
+    ts.factory.createUnionTypeNode([
+      ts.factory.createTypeReferenceNode(
+        ts.factory.createIdentifier('Date'),
         undefined,
       ),
-      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+      ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
     ]),
   ]),
 } satisfies DefinitionNode
 
 export const postgresDefinitions = {
-  bit: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  bool: factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
-  box: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  bpchar: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  bytea: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  cidr: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+  bit: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  bool: ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
+  box: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  bpchar: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  bytea: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  cidr: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
   date: timestamp,
   enum(column, table, enums) {
     const values = enums.get(`${table.schema}.${column.dataType}`)?.sort()
-    if (!values) return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)
-    return factory.createUnionTypeNode(
+    if (!values)
+      return ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword)
+    return ts.factory.createUnionTypeNode(
       values.map((value) =>
-        factory.createLiteralTypeNode(factory.createStringLiteral(value)),
+        ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(value)),
       ),
     )
   },
-  float4: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  float8: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  inet: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  int2: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  int4: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+  float4: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  float8: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  inet: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  int2: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  int4: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
   int8: {
     imports: { kysely: [kyselyColumnTypeImportSpecifier] },
     declarations: [],
-    value: factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-      factory.createUnionTypeNode([
-        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-        factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-        factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword),
+    value: ts.factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+      ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+      ts.factory.createUnionTypeNode([
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.BigIntKeyword),
       ]),
-      factory.createUnionTypeNode([
-        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-        factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-        factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword),
+      ts.factory.createUnionTypeNode([
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.BigIntKeyword),
       ]),
     ]),
   },
   json,
   jsonb: json,
-  line: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  lseg: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  macaddr: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  money: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+  line: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  lseg: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  macaddr: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  money: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
   numeric: {
     imports: { kysely: [kyselyColumnTypeImportSpecifier] },
     declarations: [],
-    value: factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
-      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-      factory.createUnionTypeNode([
-        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-        factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+    value: ts.factory.createTypeReferenceNode(kyselyColumnTypeIdentifier, [
+      ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+      ts.factory.createUnionTypeNode([
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
       ]),
-      factory.createUnionTypeNode([
-        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-        factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+      ts.factory.createUnionTypeNode([
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
       ]),
     ]),
   },
-  oid: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  path: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  polygon: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  serial: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  text: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  time: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+  oid: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  path: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  polygon: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  serial: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  text: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  time: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
   timestamp,
   timestamptz: timestamp,
-  tsquery: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  tsvector: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  txid_snapshot: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  uuid: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  varbit: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  varchar: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-  xml: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+  tsquery: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  tsvector: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  txid_snapshot: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  uuid: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  varbit: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  varchar: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  xml: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
 } satisfies Definitions

@@ -1,16 +1,16 @@
-import { SyntaxKind, factory } from 'typescript'
+import ts from 'typescript'
 
 import { type Definitions } from '../types.js'
 
 export const sqliteDefinitions = {
-  any: factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-  blob: factory.createTypeReferenceNode(
-    factory.createIdentifier('Buffer'),
+  any: ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+  blob: ts.factory.createTypeReferenceNode(
+    ts.factory.createIdentifier('Buffer'),
     undefined,
   ),
-  boolean: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  integer: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  numeric: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  real: factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-  text: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+  boolean: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  integer: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  numeric: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  real: ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  text: ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
 } satisfies Definitions
