@@ -8,6 +8,7 @@ import pc from 'picocolors'
 import { isCI } from 'std-env'
 
 // TODO: Import from Clack
+////////////////////////////////////////////////////////////////////////////////////////////////
 const unicode = isUnicodeSupported()
 
 function s(c: string, fallback: string) {
@@ -19,6 +20,7 @@ export const S_BAR = s('│', '|')
 export const S_ERROR = s('■', 'x')
 export const S_INFO = s('●', '•')
 export const S_SUCCESS = s('◆', '*')
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 export function message(message = '', options: LogMessageOptions = {}) {
   const { symbol = pc.gray(S_BAR) } = options

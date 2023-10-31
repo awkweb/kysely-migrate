@@ -168,9 +168,9 @@ test('getColumnType > Generated', () => {
         email: string;
     };
 
-    export type UserSelectable = Selectable<User>;
-
     export type UserInsertable = Insertable<User>;
+
+    export type UserSelectable = Selectable<User>;
 
     export type UserUpdateable = Updateable<User>;
 
