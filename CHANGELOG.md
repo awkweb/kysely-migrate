@@ -1,5 +1,11 @@
 # kysely-migrate
 
+## 0.0.13
+
+### Patch Changes
+
+- [`410be33`](https://github.com/tmm/kysely-migrate/commit/410be33122dd3446a076621ee5f19926e620ae60) Thanks [@tmm](https://github.com/tmm)! - Updated dialect definitions
+
 ## 0.0.12
 
 ### Patch Changes
