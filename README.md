@@ -6,8 +6,14 @@
 
 ```bash
 npm i --save-dev kysely-migrate
+```
+```bash
 pnpm add -D kysely-migrate
+```
+```bash
 yarn add -D kysely-migrate
+```
+```bash
 bun add -D kysely-migrate
 ```
 
@@ -36,19 +42,100 @@ Run [commands](#commands) to manage migrations and generate types.
 kysely-migrate <command> [options]
 ```
 
+## Commands
+
+Run `kysely-migrate --help` or `kysely-migrate <command> --help` to see the list of available commands, options, and examples. The following global options exist:
+
+| Option               | Type     | Description                     |
+| -------------------- | -------- | ------------------------------- |
+| `-c, --config <path>` | `string` | Path to config file               |
+| `-r, --root <path>`  | `string` | Root path to resolve config from |
+
+### codegen
+
+Generate types from database metadata
+
+```bash
+kysely-migrate codegen
+```
+
+| Option         | Type      | Description    |
+| -------------- | --------- | -------------- |
+| `-s, --silent` | `boolean` | Disable output |
+
+### create
+
+Create new migration
+
+```bash
+kysely-migrate create
+```
+
+| Option         | Type      | Description    |
+| -------------- | --------- | -------------- |
+| `-n, --name`   | `string`  | Migration name |
+| `-s, --silent` | `boolean` | Disable output |
+
+### down
+
+Migrate one step down
+
+```bash
+kysely-migrate down
+```
+
+| Option         | Type      | Description          |
+| -------------- | --------- | -------------------- |
+| `-R, --reset`  | `boolean` | Reset all migrations |
+| `-s, --silent` | `boolean` | Disable output       |
+
+### init
+
+Create configuration file
+
+```bash
+kysely-migrate init
+```
+
+| Option         | Type      | Description    |
+| -------------- | --------- | -------------- |
+| `-s, --silent` | `boolean` | Disable output |
+
+### list
+
+List migrations
+
+```bash
+kysely-migrate list
+```
+
+### to
+
+Migrate to selected migration
+
+```bash
+kysely-migrate to
+```
+
+| Option         | Type      | Description    |
+| -------------- | --------- | -------------- |
+| `-n, --name`   | `string`  | Migration name |
+| `-s, --silent` | `boolean` | Disable output |
+
+### up
+
+Migrate one step up
+
+```bash
+kysely-migrate up
+```
+
+| Option         | Type      | Description                  |
+| -------------- | --------- | ---------------------------- |
+| `-l, --latest` | `boolean` | Apply all pending migrations |
+| `-s, --silent` | `boolean` | Disable output               |
+
 ## API
-
-### Commands
-
-Run `kysely-migrate --help` or `kysely-migrate <command> --help` to see the list of available commands, options, and examples.
-
-- `codegen` generate types from database metadata
-- `create` create new migration
-- `down` migrate one step down
-- `init` create configuration file
-- `list` list migrations
-- `to` migrate to selected migration
-- `up` migrate one step up
 
 ### defineConfig
 
