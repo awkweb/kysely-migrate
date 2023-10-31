@@ -133,7 +133,7 @@ test('postgres', async () => {
         field_bytea: string;
         field_cidr: string;
         field_date: ColumnType<Date, Date | string, Date | string>;
-        field_enum: \\"foo\\" | \\"bar\\" | \\"baz\\";
+        field_enum: \\"bar\\" | \\"baz\\" | \\"foo\\";
         field_float4: number;
         field_float8: number;
         field_inet: string;

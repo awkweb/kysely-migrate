@@ -56,7 +56,7 @@ export const postgresDefinitions = {
   cidr: factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
   date: timestamp,
   enum(column, table, enums) {
-    const values = enums.get(`${table.schema}.${column.dataType}`)
+    const values = enums.get(`${table.schema}.${column.dataType}`)?.sort()
     if (!values) return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)
     return factory.createUnionTypeNode(
       values.map((value) =>

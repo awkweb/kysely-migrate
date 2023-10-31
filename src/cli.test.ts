@@ -43,8 +43,10 @@ test('--help', () => {
       $ kysely-migrate up --help
 
     Options:
-      -h, --help     Display this message 
-      -v, --version  Display version number "
+      -c, --config <path>  Path to config file 
+      -h, --help           Display this message 
+      -r, --root <path>    Root path to resolve config from 
+      -v, --version        Display version number "
   `)
 })
 
