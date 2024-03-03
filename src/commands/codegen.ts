@@ -1,5 +1,5 @@
 import { dirname, relative } from 'path'
-import { capitalCase } from 'change-case'
+import { pascalCase } from 'change-case'
 import { writeFile } from 'fs/promises'
 import pc from 'picocolors'
 
@@ -49,7 +49,7 @@ export async function codegen(config: Config, options: CodegenOptions = {}) {
     )
     message(
       `${table.name} => ${pc.magenta('export')} ${pc.cyan('type')} ${pc.green(
-        capitalCase(table.name),
+        pascalCase(table.name),
       )} = ${pc.yellow('{')} ${properties} ${pc.yellow('}')}`,
       { symbol: pc.green(S_SUCCESS) },
     )
